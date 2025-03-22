@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\menuItems\" />
-    <Folder Include="wwwroot\samples\" />
   </ItemGroup>
 
   <ItemGroup>
