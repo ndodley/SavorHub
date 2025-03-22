@@ -22,10 +22,23 @@
 				<th>Price</th>
 				<th>Category</th>
 				<th>Food Type</th>
+				<th>Image</th>
 				<th></th>
 			</tr>
 		</thead>
 	</table>
+
+	<div id="CSV" class="mt-4">
+		<h2>Download/Upload CSV File</h2>
+		<a href="/api/MenuItem/DownloadSampleCSV" class="btn btn-primary">Download Sample CSV</a>
+		<input type="file" id="csvFileInput" class="form-control-file" />
+		<button id="uploadCSVButton" class="btn btn-primary mt-2">Upload CSV</button>
+	</div>
+
+	<div id="csvTableContainer" class="mt-4" style="display:none;">
+		<h3>CSV Input Data</h3>
+		<table id="csvTable" class="table table-bordered table-striped" style="width:100%"></table>
+	</div>
 
 </div>
 
