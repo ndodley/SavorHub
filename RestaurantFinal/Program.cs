@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Restaurant.Data.Data;
 using Restaurant.Data.Repository;
 using Restaurant.Data.Repository.IRepository;
+using Restaurant.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add the UnitOfWork to the services
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Add user authentication with Identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 
 var app = builder.Build();

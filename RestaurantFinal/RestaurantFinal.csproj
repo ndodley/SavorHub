@@ -19,10 +19,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Restaurant.Data\Restaurant.Data.csproj" />
+    <ProjectReference Include="..\Restaurant.Utility\Restaurant.Utility.csproj" />
   </ItemGroup>
 
 </Project>
