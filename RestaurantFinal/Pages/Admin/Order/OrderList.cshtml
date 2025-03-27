@@ -40,17 +40,20 @@
 		</div>
 		<div class="p-2">
 			<ul class="list-group list-group-horizontal-sm">
-				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="cancelled">
-				<li class="list-group-item @cancelled">Cancelled</li>
-				</a>
-				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="completed">
-				<li class="list-group-item @completed">Completed</li>
-				</a>
-				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="ready">
-				<li class="list-group-item @ready">Ready For PickUp</li>
+				<a style="text-decoration:none;" asp-page="OrderList">
+					<li class="list-group-item">All</li>
 				</a>
 				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="inprocess">
-				<li class="list-group-item @inProcess">InProcess</li>
+					<li class="list-group-item @inProcess">InProcess</li>
+				</a>
+				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="ready">
+					<li class="list-group-item @ready">Ready For PickUp</li>
+				</a>
+				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="completed">
+					<li class="list-group-item @completed">Completed</li>
+				</a>
+				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="cancelled">
+					<li class="list-group-item @cancelled">Cancelled</li>
 				</a>
 			</ul>
 		</div>
