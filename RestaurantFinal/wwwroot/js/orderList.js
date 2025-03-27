@@ -12,6 +12,9 @@ $(document).ready(function () {
             if (url.includes("ready")) {
                 loadList("ready");
             }
+            else if (url.includes("all")) {
+                loadList("all");
+            }
             else {
                 loadList("inprocess");
             }
@@ -21,30 +24,35 @@ $(document).ready(function () {
 
 
 function loadList(param) {
+    var columns = [
+        { "data": "id", "width": "15%" },
+        { "data": "pickupName", "width": "15%" },
+        { "data": "applicationUser.email", "width": "15%" },
+        { "data": "orderTotal", "width": "15%" },
+        { "data": "pickUpTime", "width": "25%" },
+        {
+            "data": "id",
+            "render": function (data) {
+                return `<div class="w-75 btn-group" >
+                        <a href="/Admin/Order/OrderDetails?id=${data}"  class="btn btn-success text-white mx-2">
+                        <i class="bi bi-pencil-square"></i>  </a>
+                        </div>`
+            },
+            "width": "15%"
+        }
+    ];
+
+    if (param === "all") {
+        columns.splice(5, 0, { "data": "status", "width": "10%" });
+    }
+
     dataTable = $('#DT_load').DataTable({
         "ajax": {
             "url": "/api/order?status=" + param,
             "type": "GET",
             "datatype": "json"
         },
-        "columns": [
-            { "data": "id", "width": "15%" },
-            { "data": "pickupName", "width": "15%" },
-            { "data": "applicationUser.email", "width": "15%" },
-            { "data": "orderTotal", "width": "15%" },
-            { "data": "pickUpTime", "width": "25%" },
-            {
-                "data": "id",
-                "render": function (data) {
-                    return `<div class="w-75 btn-group" >
-                            <a href="/Admin/Order/OrderDetails?id=${data}"  class="btn btn-success text-white mx-2">
-                            <i class="bi bi-pencil-square"></i>  </a>
-                            </div>`
-                },
-
-                "width": "15%"
-            }
-        ],
+        "columns": columns,
         "width": "100%"
     });
 }
