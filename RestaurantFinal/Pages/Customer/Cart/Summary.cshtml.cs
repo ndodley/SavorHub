@@ -76,7 +76,9 @@ namespace RestaurantFinal.Pages.Customer.Cart
 
                 }
 
-                _unitOfWork.ShoppingCart.RemoveRange(ShoppingCartList);
+                // After placing the order make the sure the status is submitted in order to show in the order history
+                OrderHeader.Status = SD.StatusSubmitted;
+                _unitOfWork.ShoppingCart.RemoveRange(ShoppingCartList); // Clear the shopping cart
                 _unitOfWork.Save();
 
                 // Stripe Payment/////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +129,7 @@ namespace RestaurantFinal.Pages.Customer.Cart
 
             }
 
-            return RedirectToPage("Index");
+            return RedirectToPage("OrderConfirmation"); // Redirect to OrderConfirmation page
         }
     }
 }
