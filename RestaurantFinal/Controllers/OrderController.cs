@@ -39,6 +39,9 @@ namespace RestaurantFinal.Controllers
                     {
                         OrderHeaderList = OrderHeaderList.Where(u => u.Status == SD.StatusReady);
                     }
+                    else if (status == "all") {
+                        // No filtering, show all orders
+                    }
                     else
                     {
                         OrderHeaderList = OrderHeaderList.Where(u => u.Status == SD.StatusSubmitted || u.Status == SD.StatusInProcess);
