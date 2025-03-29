@@ -52,6 +52,12 @@ namespace RestaurantFinal.Controllers
             return Json(new { data = OrderHeaderList });
         }
 
-
+        [HttpGet("user/{userId}")]
+        [Authorize]
+        public IActionResult GetUserOrders(string userId)
+        {
+            var OrderHeaderList = _unitOfWork.OrderHeader.GetAll(u => u.UserId == userId, includeProperties: "ApplicationUser");
+            return Json(new { data = OrderHeaderList });
+        }
     }
 }
