@@ -1,0 +1,157 @@
+﻿@page
+@model RestaurantFinal.Pages.Customer.Menu.DetailsModel
+
+<div class="">
+    <form method="post">
+        <input asp-for="ShoppingCart.MenuItemId" hidden />
+        <input asp-for="ShoppingCart.ApplicationUserId" hidden />
+        <div class="container backgroundWhite">
+            <div class="card">
+                <div class="card-header">
+                    <div class="text-light ml-0 row ">
+                        <div class="col-12 col-md-6 pt-2">
+                            <h1 class="text-primary">@Model.ShoppingCart.MenuItem.Name</h1>
+                        </div>
+                        <div class="col-12 col-md-6 text-end pt-2">
+                            <h1 class="text-muted"> $@Model.ShoppingCart.MenuItem.Price</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-8">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="badge bg-warning p-3 h3">@Model.ShoppingCart.MenuItem.Category.Name</span>
+                                        <span class="badge bg-dark p-3">@Model.ShoppingCart.MenuItem.FoodType.Name</span>
+                                        <h3 class="text-success"></h3>
+                                        <p class="text-secondary">@Html.Raw(Model.ShoppingCart.MenuItem.Description)</p>
+                                        <div class="form-floating my-2">
+                                            <input asp-for="ShoppingCart.Count" class="form-control" aria-required="true" />
+                                            <label asp-for="ShoppingCart.Count"></label>
+                                            <span asp-validation-for="ShoppingCart.Count" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 p-1 text-center">
+                                <img src="@Model.ShoppingCart.MenuItem.Image" width="100%" class="rounded" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12 col-md-6 pb-1 ">
+                            <a class="btn btn-success btn-square form-control" style="height:50px;">Back to List</a>
+                        </div>
+                        <div class="col-12 col-md-6 ">
+                            <button type="submit" class="btn btn-primary btn-square form-control" style="height:50px;">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Reviews Section -->
+    <div class="container backgroundWhite mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-star-fill"></i> Customer Reviews
+                    @if (Model.Reviews.Any())
+                    {
+                        <span class="badge bg-warning text-dark ms-2">
+                            @Model.AverageRating.ToString("F1") / 5.0 (@Model.Reviews.Count reviews)
+                        </span>
+                    }
+                </h3>
+            </div>
+            <div class="card-body">
+                <!-- Add Review Form -->
+                <div class="border-bottom pb-4 mb-4">
+                    <h5 class="mb-3">Write a Review</h5>
+                    <form method="post" asp-page-handler="AddReview">
+                        <input asp-for="NewReview.MenuItemId" type="hidden" value="@Model.ShoppingCart.MenuItemId" />
+
+                        <div class="mb-3">
+                            <label asp-for="NewReview.Rating" class="form-label">Rating</label>
+                            <div class="rating-input">
+                                <div class="btn-group" role="group">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        var starValue = i;
+                                        <input type="radio" class="btn-check" name="NewReview.Rating" id="star@(i)" value="@starValue" asp-for="NewReview.Rating" />
+                                        <label class="btn btn-outline-warning" for="star@(i)">
+                                            <i class="bi bi-star-fill"></i> @starValue
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                            <span asp-validation-for="NewReview.Rating" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NewReview.Content" class="form-label">Your Review</label>
+                            <textarea asp-for="NewReview.Content" class="form-control" rows="4" placeholder="Share your experience with this item... (minimum 10 characters)"></textarea>
+                            <span asp-validation-for="NewReview.Content" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Submit Review
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Display Reviews -->
+                @if (Model.Reviews.Any())
+                {
+                    <h5 class="mb-3">All Reviews</h5>
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-subtitle mb-2">
+                                            @review.ApplicationUser.Name
+                                            <span class="text-muted small">- @review.Date.ToString("MMM dd, yyyy")</span>
+                                        </h6>
+                                        <div class="mb-2">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= review.Rating)
+                                                {
+                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-star text-muted"></i>
+                                                }
+                                            }
+                                            <span class="ms-2 badge bg-secondary">@review.Rating/5</span>
+                                        </div>
+                                        <p class="card-text">@review.Content</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-chat-square-text" style="font-size: 3rem;"></i>
+                        <p class="mt-2">No reviews yet. Be the first to review this item!</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
