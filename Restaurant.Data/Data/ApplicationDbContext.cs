@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Restaurant.Data.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -22,5 +22,6 @@ namespace Restaurant.Data.Data
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
         public DbSet<OrderHeader> OrderHeader { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }

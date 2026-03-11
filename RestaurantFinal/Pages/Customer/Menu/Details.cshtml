@@ -54,6 +54,102 @@
             </div>
         </div>
     </form>
+
+    <!-- Reviews Section -->
+    <div class="container backgroundWhite mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-star-fill"></i> Customer Reviews
+                    @if (Model.Reviews.Any())
+                    {
+                        <span class="badge bg-warning text-dark ms-2">
+                            @Model.AverageRating.ToString("F1") / 5.0 (@Model.Reviews.Count reviews)
+                        </span>
+                    }
+                </h3>
+            </div>
+            <div class="card-body">
+                <!-- Add Review Form -->
+                <div class="border-bottom pb-4 mb-4">
+                    <h5 class="mb-3">Write a Review</h5>
+                    <form method="post" asp-page-handler="AddReview">
+                        <input asp-for="NewReview.MenuItemId" type="hidden" value="@Model.ShoppingCart.MenuItemId" />
+
+                        <div class="mb-3">
+                            <label asp-for="NewReview.Rating" class="form-label">Rating</label>
+                            <div class="rating-input">
+                                <div class="btn-group" role="group">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        var starValue = i;
+                                        <input type="radio" class="btn-check" name="NewReview.Rating" id="star@(i)" value="@starValue" asp-for="NewReview.Rating" />
+                                        <label class="btn btn-outline-warning" for="star@(i)">
+                                            <i class="bi bi-star-fill"></i> @starValue
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                            <span asp-validation-for="NewReview.Rating" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NewReview.Content" class="form-label">Your Review</label>
+                            <textarea asp-for="NewReview.Content" class="form-control" rows="4" placeholder="Share your experience with this item... (minimum 10 characters)"></textarea>
+                            <span asp-validation-for="NewReview.Content" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Submit Review
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Display Reviews -->
+                @if (Model.Reviews.Any())
+                {
+                    <h5 class="mb-3">All Reviews</h5>
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-subtitle mb-2">
+                                            @review.ApplicationUser.Name
+                                            <span class="text-muted small">- @review.Date.ToString("MMM dd, yyyy")</span>
+                                        </h6>
+                                        <div class="mb-2">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= review.Rating)
+                                                {
+                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-star text-muted"></i>
+                                                }
+                                            }
+                                            <span class="ms-2 badge bg-secondary">@review.Rating/5</span>
+                                        </div>
+                                        <p class="card-text">@review.Content</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-chat-square-text" style="font-size: 3rem;"></i>
+                        <p class="mt-2">No reviews yet. Be the first to review this item!</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
