@@ -19,6 +19,12 @@ namespace RestaurantFinal.Pages.Customer.Menu
         [BindProperty]
         public ShoppingCart ShoppingCart { get; set; }
 
+        [BindProperty]
+        public Review NewReview { get; set; }
+
+        public IList<Review> Reviews { get; set; }
+        public double AverageRating { get; set; }
+
         public void OnGet(int id)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -31,6 +37,15 @@ namespace RestaurantFinal.Pages.Customer.Menu
                 MenuItem = _unitOfWork.MenuItem.GetFirstOrDefault(u => u.Id == id, includeProperties: "Category,FoodType"),
                 MenuItemId = id
             };
+
+            // Load reviews for this menu item
+            Reviews = _unitOfWork.Review.GetAll(r => r.MenuItemId == id, includeProperties: "ApplicationUser").OrderByDescending(r => r.Date).ToList();
+
+            // Calculate average rating
+            if (Reviews.Any())
+            {
+                AverageRating = Reviews.Average(r => r.Rating);
+            }
         }
 
 
@@ -57,6 +72,37 @@ namespace RestaurantFinal.Pages.Customer.Menu
                 return RedirectToPage("Index");
             }
             return Page();
+        }
+
+        public IActionResult OnPostAddReview()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(NewReview.Content) || NewReview.Rating < 1 || NewReview.Rating > 5)
+            {
+                TempData["error"] = "Please provide a valid review with rating between 1-5 and content (10-1000 characters).";
+                return RedirectToPage(new { id = NewReview.MenuItemId });
+            }
+
+            // Check if user already reviewed this item
+            var existingReview = _unitOfWork.Review.GetFirstOrDefault(
+                r => r.UserId == claim.Value && r.MenuItemId == NewReview.MenuItemId);
+
+            if (existingReview != null)
+            {
+                TempData["error"] = "You have already reviewed this item.";
+                return RedirectToPage(new { id = NewReview.MenuItemId });
+            }
+
+            NewReview.UserId = claim.Value;
+            NewReview.Date = DateTime.Now;
+
+            _unitOfWork.Review.Add(NewReview);
+            _unitOfWork.Save();
+
+            TempData["success"] = "Review added successfully!";
+            return RedirectToPage(new { id = NewReview.MenuItemId });
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Restaurant.Data.Repository
             OrderDetail = new OrderDetailRepository(_db);
             OrderHeader = new OrderHeaderRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_db);
+            Review = new ReviewRepository(_db);
         }
         public ICategoryRepository Category { get; private set; }
         public IFoodTypeRepository FoodType { get; private set; }
@@ -29,6 +30,7 @@ namespace Restaurant.Data.Repository
         public IOrderDetailRepository OrderDetail { get; private set; }
         public IOrderHeaderRepository OrderHeader { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
+        public IReviewRepository Review { get; private set; }
 
         public void Dispose() // Database connection is closed
         {

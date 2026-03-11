@@ -1,0 +1,152 @@
+﻿@page
+@model RestaurantFinal.Pages.Customer.Reviews.MyReviewsModel
+
+@{
+    ViewData["Title"] = "My Reviews";
+}
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="bi bi-star-fill text-warning"></i> My Reviews
+            </h2>
+
+            @if (TempData["success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (!Model.Reviews.Any())
+            {
+                <div class="alert alert-info text-center py-5">
+                    <i class="bi bi-info-circle fs-1 d-block mb-3"></i>
+                    <h4>No Reviews Yet</h4>
+                    <p class="mb-0">You haven't written any reviews yet. Order some food and share your experience!</p>
+                    <a asp-page="/Customer/Menu/Index" class="btn btn-primary mt-3">
+                        <i class="bi bi-grid-3x3-gap"></i> Browse Menu
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="col">
+                            <div class="card h-100 review-card">
+                                <div class="row g-0 h-100">
+                                    <div class="col-4">
+                                        <a asp-page="/Customer/Menu/Details" asp-route-id="@review.MenuItemId" class="d-block h-100" tabindex="-1" aria-hidden="true">
+                                            @if (!string.IsNullOrEmpty(review.MenuItem?.Image))
+                                            {
+                                                <img src="@review.MenuItem.Image" class="review-card-img rounded-start" alt="@review.MenuItem?.Name">
+                                            }
+                                            else
+                                            {
+                                                <div class="review-card-img-placeholder rounded-start d-flex align-items-center justify-content-center bg-light">
+                                                    <i class="bi bi-image text-muted fs-2"></i>
+                                                </div>
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="col-8 d-flex flex-column">
+                                        <a asp-page="/Customer/Menu/Details" asp-route-id="@review.MenuItemId" class="text-decoration-none text-dark flex-grow-1 p-3 pb-1">
+                                            <h6 class="fw-semibold mb-1 d-flex align-items-center gap-1">
+                                                @review.MenuItem?.Name
+                                                <i class="bi bi-box-arrow-up-right text-muted" style="font-size: 0.7rem;"></i>
+                                            </h6>
+                                            <div class="mb-1">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <i class="bi @(i <= review.Rating ? "bi-star-fill text-warning" : "bi-star text-muted")" style="font-size: 0.8rem;"></i>
+                                                }
+                                                <span class="text-muted ms-1" style="font-size: 0.75rem;">(@review.Rating/5)</span>
+                                            </div>
+                                            <p class="text-muted mb-1" style="font-size: 0.75rem;">
+                                                <i class="bi bi-calendar3"></i> @review.Date.ToString("MMM dd, yyyy")
+                                            </p>
+                                            <p class="mb-0 review-content">@review.Content</p>
+                                        </a>
+                                        <div class="px-3 pb-3 pt-1 text-end">
+                                            <form method="post" asp-page-handler="Delete" asp-route-id="@review.Id"
+                                                  onsubmit="return confirm('Delete this review?');">
+                                                <button type="submit" class="btn btn-sm btn-delete">
+                                                    <i class="bi bi-trash3"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="mt-4 text-center">
+                    <p class="text-muted">
+                        <i class="bi bi-info-circle"></i>
+                        Total Reviews: <strong>@Model.Reviews.Count()</strong>
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .review-card {
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+
+    .review-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .review-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        min-height: 140px;
+    }
+
+    .review-card-img-placeholder {
+        width: 100%;
+        height: 100%;
+        min-height: 140px;
+    }
+
+    .review-content {
+        font-size: 0.875rem;
+        color: #495057;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .btn-delete {
+        font-size: 0.75rem;
+        color: #dc3545;
+        border: 1px solid #dc3545;
+        border-radius: 20px;
+        padding: 2px 10px;
+        background: transparent;
+        transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .btn-delete:hover {
+        background: #dc3545;
+        color: #fff;
+    }
+</style>
+</style>

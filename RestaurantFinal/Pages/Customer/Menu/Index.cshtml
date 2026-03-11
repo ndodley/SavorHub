@@ -9,6 +9,7 @@
 			<div class="row my-3">
 				@foreach (var menuItem in Model.MenuItemList.Where(u => u.CategoryId == category.Id))
 				{
+					var rating = Model.MenuItemRatings[menuItem.Id];
 
 					<div class="col-lg-4 col-md-6 pb-4 filter">
 						<div class="card bg-white rounded shadow-sm" style="border:1px solid #222">
@@ -24,6 +25,29 @@
 								<div class="col-6 border-0">
 									<span class="badge p-2 border w-100 bg-info ">@menuItem.FoodType.Name</span>
 								</div>
+								@if (rating.ReviewCount > 0)
+								{
+									<div class="col-12 pt-2 text-center">
+										<div class="d-flex justify-content-center align-items-center">
+											@for (int i = 1; i <= 5; i++)
+											{
+												if (i <= rating.AverageRating)
+												{
+													<i class="bi bi-star-fill text-warning"></i>
+												}
+												else if (i - 0.5 <= rating.AverageRating)
+												{
+													<i class="bi bi-star-half text-warning"></i>
+												}
+												else
+												{
+													<i class="bi bi-star text-muted"></i>
+												}
+											}
+											<span class="ms-2 text-muted small">@rating.AverageRating.ToString("F1") (@rating.ReviewCount reviews)</span>
+										</div>
+									</div>
+								}
 								<div class="col-12 pt-2" style="font-size:13px; text-align:justify">
 									<p> @Html.Raw(menuItem.Description)</p>
 								</div>
