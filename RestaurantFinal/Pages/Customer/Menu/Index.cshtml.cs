@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Restaurant.Data.Repository.IRepository;
 using Restaurant.Models;
+using System.Security.Claims;
 
 namespace RestaurantFinal.Pages.Customer.Menu
 {
@@ -17,6 +18,8 @@ namespace RestaurantFinal.Pages.Customer.Menu
         public IEnumerable<MenuItem> MenuItemList { get; set; }
         public IEnumerable<Category> CategoryList { get; set; }
         public Dictionary<int, (double AverageRating, int ReviewCount)> MenuItemRatings { get; set; }
+
+        public HashSet<int> FavoriteMenuItemIds { get; set; } = [];
 
         public void OnGet()
         {
@@ -34,6 +37,43 @@ namespace RestaurantFinal.Pages.Customer.Menu
                     return (avgRating, reviews.Count);
                 }
             );
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                FavoriteMenuItemIds = _unitOfWork.Favorite
+                    .GetAll(f => f.ApplicationUserId == userId)
+                    .Select(f => f.MenuItemId)
+                    .ToHashSet();
+            }
+        }
+
+        public IActionResult OnPostToggleFavorite(int menuItemId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Challenge();
+            }
+
+            var existing = _unitOfWork.Favorite.GetFirstOrDefault(f => f.ApplicationUserId == userId && f.MenuItemId == menuItemId);
+            if (existing == null)
+            {
+                _unitOfWork.Favorite.Add(new Favorite
+                {
+                    ApplicationUserId = userId,
+                    MenuItemId = menuItemId
+                });
+                TempData["success"] = "Added to favorites";
+            }
+            else
+            {
+                _unitOfWork.Favorite.Remove(existing);
+                TempData["success"] = "Removed from favorites";
+            }
+
+            _unitOfWork.Save();
+            return RedirectToPage();
         }
     }
 }

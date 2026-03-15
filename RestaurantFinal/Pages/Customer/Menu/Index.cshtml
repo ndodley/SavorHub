@@ -10,12 +10,28 @@
 				@foreach (var menuItem in Model.MenuItemList.Where(u => u.CategoryId == category.Id))
 				{
 					var rating = Model.MenuItemRatings[menuItem.Id];
+					var isFav = Model.FavoriteMenuItemIds.Contains(menuItem.Id);
 
 					<div class="col-lg-4 col-md-6 pb-4 filter">
 						<div class="card bg-white rounded shadow-sm" style="border:1px solid #222">
 							<div class="card-body pb-1 row">
 								<div class="col-8 h5">@menuItem.Name</div>
-								<div class="col-4 text-end"><span class="text-info h4">$@menuItem.Price</span></div>
+								<div class="col-4 text-end d-flex justify-content-end align-items-center gap-2">
+									<span class="text-info h4">$@menuItem.Price</span>
+									<form method="post" asp-page-handler="ToggleFavorite" class="d-inline">
+										<input type="hidden" name="menuItemId" value="@menuItem.Id" />
+										<button type="submit" class="btn btn-link p-0" title="Toggle Favorite" aria-label="Toggle Favorite">
+											@if (isFav)
+											{
+												<i class="bi bi-heart-fill text-danger fs-5"></i>
+											}
+											else
+											{
+												<i class="bi bi-heart text-muted fs-5"></i>
+											}
+										</button>
+									</form>
+								</div>
 							</div>
 							<img class="card-img-top img-fluid d-block mx-auto mb-3" src="@menuItem.Image" alt="menuitem image">
 							<div class="card-body p-1 px-3 row">

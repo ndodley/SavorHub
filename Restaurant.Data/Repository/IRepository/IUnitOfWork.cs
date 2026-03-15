@@ -16,6 +16,7 @@ namespace Restaurant.Data.Repository.IRepository
         IOrderDetailRepository OrderDetail { get; }
         IApplicationUserRepository ApplicationUser { get; }
         IReviewRepository Review { get; }
+        IFavoriteRepository Favorite { get; }
         void Save();
     }
 }
