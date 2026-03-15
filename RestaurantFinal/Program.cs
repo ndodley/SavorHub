@@ -53,6 +53,8 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAntiforgery();
+
 app.UseAuthorization();
 
 app.MapStaticAssets(); // static assets like CSS, JS, images, from wwwroot folder

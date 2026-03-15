@@ -1,0 +1,78 @@
+@page
+@model RestaurantFinal.Pages.Admin.Reviews.IndexModel
+
+@{
+    ViewData["Title"] = "Admin Reviews";
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Review List</h2>
+        </div>
+    </div>
+
+    <br /><br />
+
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Menu Item</th>
+                <th>User</th>
+                <th>Rating</th>
+                <th>Date</th>
+                <th>Content</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model.Reviews)
+            {
+                <tr>
+                    <td width="20%">
+                        <div class="d-flex align-items-center gap-2">
+                            <a asp-page="/Customer/Menu/Details" asp-route-id="@review.MenuItemId" class="d-inline-block" title="View menu item">
+                                @if (!string.IsNullOrWhiteSpace(review.MenuItem?.Image))
+                                {
+                                    <img src="@review.MenuItem.Image" alt="@review.MenuItem?.Name" style="width:48px;height:48px;object-fit:cover;border-radius:8px;" />
+                                }
+                                else
+                                {
+                                    <div class="bg-light d-flex align-items-center justify-content-center" style="width:48px;height:48px;border-radius:8px;">
+                                        <i class="bi bi-image text-muted"></i>
+                                    </div>
+                                }
+                            </a>
+                            <div class="d-flex flex-column">
+                                <a asp-page="/Customer/Menu/Details" asp-route-id="@review.MenuItemId" class="text-decoration-none">
+                                    <span class="fw-semibold">@review.MenuItem?.Name</span>
+                                </a>
+                                <small class="text-muted">@review.MenuItem?.Category?.Name • @review.MenuItem?.FoodType?.Name</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td width="15%">@review.ApplicationUser?.Name</td>
+                    <td width="10%">
+                        @for (var i = 1; i <= 5; i++)
+                        {
+                            <i class="bi @(i <= review.Rating ? "bi-star-fill text-warning" : "bi-star text-muted")"></i>
+                        }
+                        <span class="text-muted">(@review.Rating/5)</span>
+                    </td>
+                    <td width="12%">@review.Date.ToString("MMM dd, yyyy")</td>
+                    <td>@review.Content</td>
+                    <td width="15%">
+                        <div class="w-100 btn-group" role="group">
+                            <a asp-page="Edit" asp-route-id="@review.Id" class="btn btn-primary mx-2">
+                                <i class="bi bi-pencil-square"></i>Edit
+                            </a>
+                            <a asp-page="Delete" asp-route-id="@review.Id" class="btn btn-danger mx-2">
+                                <i class="bi bi-trash-fill"></i>Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

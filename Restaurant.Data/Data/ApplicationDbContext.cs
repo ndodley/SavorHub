@@ -23,5 +23,15 @@ namespace Restaurant.Data.Data
         public DbSet<OrderHeader> OrderHeader { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Favorite>()
+                .HasIndex(f => new { f.ApplicationUserId, f.MenuItemId })
+                .IsUnique();
+        }
     }
 }
