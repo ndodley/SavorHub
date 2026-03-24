@@ -1,5 +1,15 @@
+/* ── Base sizing ───────────────────────────────────────────── */
+/* --content-offset is the CSS fallback used before JS measures the real */
+/* navbar height. JS in site.js overrides body.paddingTop at DOMContentLoaded. */
+:root {
+  --content-offset: 96px;
+}
+
 html {
   font-size: 14px;
+  position: relative;
+  min-height: 100%;
+  scroll-padding-top: var(--content-offset);
 }
 
 @media (min-width: 768px) {
@@ -8,24 +18,307 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+body {
+  margin-bottom: 60px;
+  padding-top: var(--content-offset);
+  background-color: var(--app-bg);
+  color: var(--app-text);
+  transition: background-color 0.25s ease, color 0.2s ease;
+}
+
+/* ── App theme tokens ──────────────────────────────────────── */
+:root,
+[data-bs-theme=light] {
+  --app-bg:           #fef3dc;
+  --app-surface:      #fffdf7;
+  --app-border:       #f0dfa8;
+  --app-text:         #1a1a1a;
+  --app-muted:        #6b6b6b;
+  --app-accent:       #f0ad4e;
+  --app-price:        #2a9d5c;
+  --app-card-shadow:  0 2px 8px rgba(180, 130, 30, 0.1);
+}
+
+[data-bs-theme=dark] {
+  --app-bg:           #1c1710;
+  --app-surface:      #3a2d18;
+  --app-border:       #5a4a28;
+  --app-text:         #f0ede8;
+  --app-muted:        #a89880;
+  --app-accent:       #f0ad4e;
+  --app-price:        #4bbf73;
+  --app-card-shadow:  0 4px 16px rgba(0, 0, 0, 0.6);
+
+  /* Bootstrap 5.3 token overrides for dark */
+  --bs-body-bg:              #1c1710;
+  --bs-body-color:           #f0ede8;
+  --bs-card-bg:              #3a2d18;
+  --bs-card-border-color:    #5a4a28;
+  --bs-border-color:         #5a4a28;
+  --bs-secondary-bg:         #3a2d18;
+  --bs-tertiary-bg:          #443520;
+  --bs-heading-color:        #f0ede8;
+  --bs-link-color:           #f0ede8;
+  --bs-link-hover-color:     #f0ad4e;
+  --bs-emphasis-color:       #ffffff;
+  --bs-secondary-color:      rgba(240, 237, 232, 0.6);
+  --bs-dropdown-bg:          #3a2d18;
+  --bs-dropdown-border-color:#5a4a28;
+  --bs-dropdown-link-color:  #f0ede8;
+  --bs-dropdown-link-hover-bg:#5a4a28;
+  --bs-input-bg:             #443520;
+  --bs-input-border-color:   #5a4a28;
+  --bs-input-color:          #f0ede8;
+  --bs-table-striped-bg:     rgba(240, 173, 78, 0.05);
+  --bs-table-hover-bg:       rgba(240, 173, 78, 0.10);
+  --bs-table-border-color:   #5a4a28;
+  --bs-table-color:          #f0ede8;
+  --bs-nav-tabs-border-color:#5a4a28;
+  --bs-nav-tabs-link-active-bg: #3a2d18;
+}
+
+/* ── Dark mode component fixes ─────────────────────────────── */
+[data-bs-theme=dark] .form-control,
+[data-bs-theme=dark] .form-select,
+[data-bs-theme=dark] .input-group-text {
+  background-color: #443520;
+  border-color: #5a4a28;
+  color: #f0ede8;
+}
+
+[data-bs-theme=dark] .form-control::placeholder {
+  color: rgba(240, 237, 232, 0.4);
+}
+
+[data-bs-theme=dark] .form-control:focus,
+[data-bs-theme=dark] .form-select:focus {
+  background-color: #503e24;
+  border-color: #f0ad4e;
+  color: #f0ede8;
+  box-shadow: 0 0 0 0.2rem rgba(240, 173, 78, 0.25);
+}
+
+[data-bs-theme=dark] .list-group-item {
+  background-color: var(--app-surface);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+[data-bs-theme=dark] .table {
+  --bs-table-bg: transparent;
+  color: var(--app-text);
+  border-color: var(--app-border);
+}
+
+[data-bs-theme=dark] .alert-info {
+  background-color: #1e2a1a;
+  border-color: #2a4020;
+  color: #86efac;
+}
+
+[data-bs-theme=dark] .alert-success {
+  background-color: #1a2a1a;
+  border-color: #1f4c27;
+  color: #86efac;
+}
+
+[data-bs-theme=dark] .card-header.bg-primary {
+  background-color: #0e0b06 !important;
+}
+
+/* Ensure card titles are readable in dark mode (Lux overrides heading colour directly) */
+[data-bs-theme=dark] .card-title,
+[data-bs-theme=dark] .card-text {
+  color: var(--app-text);
+}
+
+/* Give border-0 carousel cards a subtle visible edge in dark mode */
+[data-bs-theme=dark] .hover-card {
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+}
+
+[data-bs-theme=dark] .footer {
+  border-color: var(--app-border) !important;
+  color: var(--app-muted) !important;
+}
+
+[data-bs-theme=dark] .footer a {
+  color: var(--app-accent);
+}
+
+[data-bs-theme=dark] details > summary {
+  color: var(--app-muted);
+}
+
+/* ── Heading colour fix ────────────────────────────────────── */
+/* Lux sets --bs-heading-color: #1a1a1a which overrides inherited colour.
+   text-white on a heading must be explicit; this ensures it wins. */
+.text-white h1, .text-white h2, .text-white h3,
+.text-white h4, .text-white h5, .text-white h6 {
+  color: #ffffff !important;
+}
+
+/* ── App utility classes ───────────────────────────────────── */
+.app-card {
+  background-color: var(--app-surface) !important;
+  border: 1px solid var(--app-border) !important;
+  box-shadow: var(--app-card-shadow) !important;
+}
+
+.app-price {
+  color: var(--app-price) !important;
+}
+
+/* Food-type badge — warm-tinted in light, amber-dark in dark */
+.app-food-type-badge {
+  background-color: var(--app-border);
+  color: var(--app-text);
+  font-weight: 500;
+}
+
+/* ── Focus ring ────────────────────────────────────────────── */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
-}
-
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+/* ── Form floating placeholders ────────────────────────────── */
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+/* ── Hover card ────────────────────────────────────────────── */
+.hover-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.hover-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* ── Theme toggle button ───────────────────────────────────── */
+#theme-toggle {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+#theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Admin / Operations dark-mode fixes ────────────────────── */
+/* text-primary in Lux = #1a1a1a — invisible on dark backgrounds */
+[data-bs-theme=dark] .text-primary {
+  color: var(--app-accent) !important;
+}
+
+[data-bs-theme=dark] .text-info {
+  color: #7dcfff !important;
+}
+
+/* bg-white / backgroundWhite → map to surface in dark */
+[data-bs-theme=dark] .bg-white,
+[data-bs-theme=dark] .backgroundWhite {
+  background-color: var(--app-surface) !important;
+  color: var(--app-text) !important;
+}
+
+/* bg-light → map to tertiary surface in dark */
+[data-bs-theme=dark] .bg-light {
+  background-color: var(--bs-tertiary-bg) !important;
+  color: var(--app-text) !important;
+}
+
+/* ── Admin card wrapper ────────────────────────────────────── */
+.admin-card {
+  background-color: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+  box-shadow: var(--app-card-shadow);
+}
+
+/* ── Admin table amber header ──────────────────────────────── */
+.admin-thead th {
+  background-color: var(--app-accent) !important;
+  color: #1a1a1a !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  padding: 0.85rem 1rem;
+}
+
+/* ── DataTables dark mode ──────────────────────────────────── */
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_length label,
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_filter label,
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_info,
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_processing {
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_paginate .paginate_button {
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: var(--app-accent) !important;
+  border-color: var(--app-accent) !important;
+  color: #1a1a1a !important;
+  border-radius: 4px;
+}
+
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current):not(.disabled) {
+  background: var(--app-border) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+  border-radius: 4px;
+}
+
+[data-bs-theme=dark] .dataTables_wrapper select,
+[data-bs-theme=dark] .dataTables_wrapper input[type="search"] {
+  background-color: #443520;
+  border-color: #5a4a28;
+  color: #f0ede8;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+/* ── Order status filter pills ─────────────────────────────── */
+.order-status-nav .list-group-item {
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  font-weight: 500;
+}
+
+.order-status-nav .list-group-item.active {
+  background-color: var(--app-accent) !important;
+  border-color: var(--app-accent) !important;
+  color: #1a1a1a !important;
 }

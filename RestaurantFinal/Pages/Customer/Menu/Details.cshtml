@@ -2,7 +2,7 @@
 @model RestaurantFinal.Pages.Customer.Menu.DetailsModel
 
 <div class="">
-    <div class="container backgroundWhite">
+    <div class="container">
         <div class="card">
             <div class="card-header">
                 <div class="text-light ml-0 row ">
@@ -36,7 +36,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <span class="badge bg-warning p-3 h3">@Model.ShoppingCart.MenuItem.Category.Name</span>
-                                        <span class="badge bg-dark p-3">@Model.ShoppingCart.MenuItem.FoodType.Name</span>
+                                        <span class="badge bg-secondary p-3">@Model.ShoppingCart.MenuItem.FoodType.Name</span>
                                         <h3 class="text-success"></h3>
                                         <p class="text-secondary">@Html.Raw(Model.ShoppingCart.MenuItem.Description)</p>
                                         <div class="form-floating my-2">
@@ -68,7 +68,7 @@
     </div>
 
     <!-- Reviews Section -->
-    <div class="container backgroundWhite mt-4">
+    <div class="container mt-4">
         <div class="card">
             <div class="card-header bg-primary text-white">
                 <h3 class="mb-0">

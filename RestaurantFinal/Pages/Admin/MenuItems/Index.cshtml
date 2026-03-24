@@ -1,45 +1,48 @@
 ﻿@page
 @model RestaurantFinal.Pages.Admin.MenuItems.IndexModel
 
-<div class="container p-3">
-	<div class="row pt-4">
-		<div class="col-6">
-			<h2 class="text-primary">Menu Item List</h2>
-		</div>
-		<div class="col-6 text-end">
-			<a asp-page="upsert" class="btn btn-primary">
-				<i class="bi bi-plus-square"></i> &nbsp;Create New Menu Item
+<div class="container py-4">
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<h2 class="text-primary mb-0">
+			<i class="bi bi-menu-button-wide me-2"></i>Menu Item List
+		</h2>
+		<a asp-page="upsert" class="btn btn-warning">
+			<i class="bi bi-plus-square me-1"></i> Create New Menu Item
+		</a>
+	</div>
+
+	<div class="admin-card p-3">
+		<table id="DT_load" class="table table-hover table-striped table-bordered" style="width:100%">
+			<thead class="admin-thead">
+				<tr>
+					<th>Name</th>
+					<th>Price</th>
+					<th>Category</th>
+					<th>Food Type</th>
+					<th>Image</th>
+					<th></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+
+	<div class="admin-card p-4 mt-4">
+		<h5 class="mb-3"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Download / Upload CSV</h5>
+		<div class="d-flex flex-wrap gap-2 align-items-center">
+			<a href="/api/MenuItem/DownloadSampleCSV" class="btn btn-outline-warning">
+				<i class="bi bi-download me-1"></i> Download Sample CSV
 			</a>
+			<input type="file" id="csvFileInput" class="form-control" style="max-width:280px;" />
+			<button id="uploadCSVButton" class="btn btn-warning">
+				<i class="bi bi-upload me-1"></i> Upload CSV
+			</button>
 		</div>
 	</div>
 
-	<br /><br />
-
-	<table id="DT_load" class="table table-bordered table-striped" style="width:100%">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Price</th>
-				<th>Category</th>
-				<th>Food Type</th>
-				<th>Image</th>
-				<th></th>
-			</tr>
-		</thead>
-	</table>
-
-	<div id="CSV" class="mt-4">
-		<h2>Download/Upload CSV File</h2>
-		<a href="/api/MenuItem/DownloadSampleCSV" class="btn btn-primary">Download Sample CSV</a>
-		<input type="file" id="csvFileInput" class="form-control-file" />
-		<button id="uploadCSVButton" class="btn btn-primary mt-2">Upload CSV</button>
+	<div id="csvTableContainer" class="admin-card overflow-hidden mt-4" style="display:none;">
+		<div class="p-3 border-bottom fw-semibold">CSV Input Data</div>
+		<table id="csvTable" class="table table-bordered mb-0" style="width:100%"></table>
 	</div>
-
-	<div id="csvTableContainer" class="mt-4" style="display:none;">
-		<h3>CSV Input Data</h3>
-		<table id="csvTable" class="table table-bordered table-striped" style="width:100%"></table>
-	</div>
-
 </div>
 
 @section Scripts {

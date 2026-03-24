@@ -2,58 +2,58 @@
 @model RestaurantFinal.Pages.Admin.Order.ManageOrderModel
 @using Restaurant.Utility
 
-<h1 class="text-primary py-3">Manage Order's</h1>
-<form method="post">
-    <div class="container row bg-white p-2 mb-3 rounded">
+<div class="container py-4">
+    <h2 class="text-primary mb-4">
+        <i class="bi bi-clipboard-check me-2"></i>Manage Orders
+    </h2>
+    <form method="post">
         @foreach (var item in Model.OrderDetailVM)
         {
-            <div class="col-12 pb-3 pt-3 mt-4 border  rounded">
-                <div class="row">
-                    <div class="col-4">
-                        Order Number : @item.OrderHeader.Id
-                        <ul class="text-info">
+            <div class="admin-card p-4 mb-4">
+                <div class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <p class="text-muted text-uppercase small fw-bold mb-2">
+                            Order <span class="text-primary">#@item.OrderHeader.Id</span>
+                        </p>
+                        <ul class="list-unstyled mb-0">
                             @foreach (var details in item.OrderDetails)
                             {
-                                <li>@details.Name x @details.Count</li>
+                                <li class="d-flex align-items-center gap-1 py-1">
+                                    <i class="bi bi-dot text-warning fs-5"></i>
+                                    <span>@details.Name <span class="text-muted">x @details.Count</span></span>
+                                </li>
                             }
                         </ul>
                     </div>
-                    <div class="col-4 pb-2">
-                        <div class="input-group pb-2">
-                            <div class="input-group-append">
-                                <span class="input-group-text bg-secondary border">Time</span>
-                            </div>
+                    <div class="col-12 col-md-4">
+                        <div class="input-group mb-2">
+                            <span class="input-group-text"><i class="bi bi-clock me-1"></i> Pickup</span>
                             <input type="text" value="@item.OrderHeader.PickUpTime" class="form-control" readonly />
                         </div>
-                        <textarea readonly asp-for="@item.OrderHeader.Comments" class="rounded border form-control" rows="3"></textarea>
+                        <textarea readonly asp-for="@item.OrderHeader.Comments" class="form-control rounded" rows="3" placeholder="No special instructions"></textarea>
                     </div>
-                    <div class="col-3 offset-1 d-flex align-content-center">
-                        <div class="col-12">
-
-                            @if (item.OrderHeader.Status == SD.StatusSubmitted)
-                            {
-                                <button type="submit" class="btn btn-primary form-control mb-3"
-                                        asp-page-handler="OrderInProcess" asp-route-orderId="@item.OrderHeader.Id">
-                                    <i class="bi bi-check-square"></i> &nbsp; Start Cooking
-                                </button>
-                            }
-                            @if (item.OrderHeader.Status == SD.StatusInProcess)
-                            {
-                                <button type="submit" class="btn btn-success form-control mb-3"
-                                        asp-page-handler="OrderReady" asp-route-orderId="@item.OrderHeader.Id">
-                                    <i class="bi bi-emoji-laughing"></i> &nbsp; Order Ready
-                                </button>
-                            }
-                            <button type="submit" class="btn btn-warning form-control mb-3"
-                                    asp-page-handler="OrderCancel" asp-route-orderId="@item.OrderHeader.Id">
-                                <i class="bi bi-x-square-fill"></i> &nbsp; Cancel Order
+                    <div class="col-12 col-md-4 d-flex flex-column justify-content-center gap-2">
+                        @if (item.OrderHeader.Status == SD.StatusSubmitted)
+                        {
+                            <button type="submit" class="btn btn-warning w-100"
+                                    asp-page-handler="OrderInProcess" asp-route-orderId="@item.OrderHeader.Id">
+                                <i class="bi bi-check-square me-1"></i> Start Cooking
                             </button>
-
-                        </div>
+                        }
+                        @if (item.OrderHeader.Status == SD.StatusInProcess)
+                        {
+                            <button type="submit" class="btn btn-success w-100"
+                                    asp-page-handler="OrderReady" asp-route-orderId="@item.OrderHeader.Id">
+                                <i class="bi bi-emoji-laughing me-1"></i> Order Ready
+                            </button>
+                        }
+                        <button type="submit" class="btn btn-outline-danger w-100"
+                                asp-page-handler="OrderCancel" asp-route-orderId="@item.OrderHeader.Id">
+                            <i class="bi bi-x-square-fill me-1"></i> Cancel Order
+                        </button>
                     </div>
                 </div>
             </div>
         }
-    </div>
-
-</form>
+    </form>
+</div>
