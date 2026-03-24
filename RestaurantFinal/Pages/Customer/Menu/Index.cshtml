@@ -1,7 +1,7 @@
 ﻿@page
 @model RestaurantFinal.Pages.Customer.Menu.IndexModel
 
-<div class="row container pb-3 backgroundWhite">
+<div class="row container pb-3">
 	@foreach (var category in Model.CategoryList)
 	{
 		<h2 class="text-success pl-1"><b>@category.Name</b></h2>
@@ -13,12 +13,12 @@
 					var isFav = Model.FavoriteMenuItemIds.Contains(menuItem.Id);
 
 					<div class="col-lg-4 col-md-6 pb-4 filter">
-						<div class="card bg-white rounded shadow-sm" style="border:1px solid #222">
+						<div class="card rounded shadow-sm app-card hover-card">
 							<div class="card-body pb-1 row">
 								<div class="col-8 h5">@menuItem.Name</div>
 								<div class="col-4 text-end d-flex justify-content-end align-items-center gap-2">
-									<span class="text-info h4">$@menuItem.Price</span>
-									<form method="post" asp-page-handler="ToggleFavorite" class="d-inline">
+									<span class="app-price h4">$@menuItem.Price</span>
+									<form method="post" asp-page-handler="ToggleFavorite" class="d-inline position-relative" style="z-index:2;">
 										<input type="hidden" name="menuItemId" value="@menuItem.Id" />
 										<button type="submit" class="btn btn-link p-0" title="Toggle Favorite" aria-label="Toggle Favorite">
 											@if (isFav)
@@ -36,10 +36,10 @@
 							<img class="card-img-top img-fluid d-block mx-auto mb-3" src="@menuItem.Image" alt="menuitem image">
 							<div class="card-body p-1 px-3 row">
 								<div class="col-6">
-									<span class="badge p-2 border w-100 text-dark bg-warning ">@menuItem.Category.Name</span>
+									<span class="badge p-2 border w-100 text-dark bg-warning">@menuItem.Category.Name</span>
 								</div>
 								<div class="col-6 border-0">
-									<span class="badge p-2 border w-100 bg-info ">@menuItem.FoodType.Name</span>
+									<span class="badge p-2 border w-100 bg-info">@menuItem.FoodType.Name</span>
 								</div>
 								@if (rating.ReviewCount > 0)
 								{
@@ -65,16 +65,12 @@
 									</div>
 								}
 								<div class="col-12 pt-2" style="font-size:13px; text-align:justify">
-									<p> @Html.Raw(menuItem.Description)</p>
+									<p>@Html.Raw(menuItem.Description)</p>
 								</div>
-								<div class="col-12 p-1">
-									<a asp-page="Details" asp-route-id="@menuItem.Id" class="btn btn-dark form-control btn-sm p-2" style="height:40px">View Details</a>
-								</div>
+								<a asp-page="Details" asp-route-id="@menuItem.Id" class="stretched-link" aria-label="View details for @menuItem.Name"></a>
 							</div>
 						</div>
 					</div>
-
-
 				}
 			</div>
 		</div>
