@@ -2,52 +2,126 @@
 @model RestaurantFinal.Pages.Customer.Favorites.IndexModel
 @{
     ViewData["Title"] = "My Favorites";
+
+    var favoritesByCategory = Model.Favorites
+        .Where(f => f.MenuItem != null)
+        .GroupBy(f => f.MenuItem!.CategoryId)
+        .ToDictionary(g => g.Key, g => g.ToList());
 }
 
-<div class="container p-3">
-    <div class="row pt-4">
-        <div class="col-12">
-            <h2 class="text-primary">My Favorites</h2>
+<div class="container pb-4">
+    <div class="d-flex align-items-end justify-content-between flex-wrap gap-2 mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">My Favourites</h1>
+            <p class="text-muted mb-0">Your saved items, grouped by category.</p>
         </div>
+        <a asp-page="/Customer/Menu/Index" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Menu
+        </a>
     </div>
-
-    <br />
 
     @if (!Model.Favorites.Any())
     {
-        <div class="alert alert-info">You don't have any favorites yet.</div>
+        <div class="card app-card shadow-sm">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-heart" style="font-size:3rem;"></i>
+                <h4 class="fw-bold mt-3 mb-2">No favourites yet</h4>
+                <p class="text-muted mb-3">Tap the heart on any menu item to save it here.</p>
+                <a asp-page="/Customer/Menu/Index" class="btn btn-warning text-dark fw-semibold">
+                    Browse Menu
+                </a>
+            </div>
+        </div>
     }
     else
     {
-        <div class="row">
-            @foreach (var fav in Model.Favorites)
+        @foreach (var category in Model.CategoryList)
+        {
+            if (!favoritesByCategory.TryGetValue(category.Id, out var favs) || favs.Count == 0)
             {
-                <div class="col-lg-4 col-md-6 pb-4">
-                    <div class="card rounded shadow-sm app-card">
-                        <a asp-page="/Customer/Menu/Details" asp-route-id="@fav.MenuItemId" class="text-decoration-none">
-                            <img class="card-img-top img-fluid d-block mx-auto" src="@fav.MenuItem?.Image" alt="menuitem image">
-                        </a>
-                        <div class="card-body pb-1 row">
-                            <div class="col-8 h5">@fav.MenuItem?.Name</div>
-                            <div class="col-4 text-end"><span class="app-price h4">$@fav.MenuItem?.Price</span></div>
+                continue;
+            }
+
+            var chunks = favs
+                .Select((fav, idx) => new { fav, idx })
+                .GroupBy(x => x.idx / 3)
+                .Select(g => g.Select(x => x.fav).ToList())
+                .ToList();
+
+            var carouselId = $"favoritesCarousel_{category.Id}";
+
+            <section class="mb-5">
+                <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                    <div>
+                        <h2 class="fw-bold mb-1">@category.Name</h2>
+                        <p class="text-muted mb-0">@favs.Count item(s)</p>
+                    </div>
+                    @if (chunks.Count > 1)
+                    {
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-secondary btn-sm px-3" type="button" data-bs-target="#@carouselId" data-bs-slide="prev" aria-label="Previous">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-sm px-3" type="button" data-bs-target="#@carouselId" data-bs-slide="next" aria-label="Next">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
                         </div>
-                        <div class="card-body p-1 px-3 row">
-                            <div class="col-6">
-                                <span class="badge p-2 border w-100 text-dark bg-warning ">@fav.MenuItem?.Category?.Name</span>
+                    }
+                </div>
+
+                <div id="@carouselId" class="carousel slide" data-bs-ride="false">
+                    <div class="carousel-inner pb-2">
+                        @for (int i = 0; i < chunks.Count; i++)
+                        {
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <div class="row g-4">
+                                    @foreach (var fav in chunks[i])
+                                    {
+                                        var item = fav.MenuItem!;
+
+                                        <div class="col-12 col-md-4">
+                                            <div class="position-relative">
+                                                <a asp-page="/Customer/Menu/Details" asp-route-id="@item.Id" class="text-decoration-none">
+                                                <div class="card h-100 shadow-sm border-0 hover-card">
+                                                    <div class="position-relative overflow-hidden rounded-top" style="height:210px;">
+                                                        <img src="@item.Image" class="w-100 h-100 object-fit-cover" alt="@item.Name" />
+                                                        <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark fw-semibold">
+                                                            @item.Category.Name
+                                                        </span>
+                                                    </div>
+                                                    <div class="card-body d-flex flex-column">
+                                                        <div class="d-flex align-items-start justify-content-between gap-2">
+                                                            <h5 class="card-title fw-semibold mb-1">@item.Name</h5>
+                                                            <span class="app-price fw-bold fs-5">$@item.Price</span>
+                                                        </div>
+                                                        <span class="badge app-food-type-badge mb-2" style="width:fit-content;">
+                                                            @item.FoodType.Name
+                                                        </span>
+                                                        <p class="text-muted small mb-3 menu-card-desc">
+                                                            @Html.Raw(item.Description)
+                                                        </p>
+                                                        <div class="mt-auto"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+
+                                            <form method="post" asp-page-handler="Remove"
+                                                    class="position-absolute top-0 start-0 m-2" style="z-index:2;"
+                                                    onsubmit="return confirm('Remove from favourites?');">
+                                                    <input type="hidden" name="id" value="@fav.Id" />
+                                                    <button type="submit" class="btn btn-light btn-sm rounded-pill shadow-sm" title="Remove favourite" aria-label="Remove favourite">
+                                                        <i class="bi bi-heart-fill text-danger"></i>
+                                                    </button>
+                                                </form>
+                                        </div>
+                                    </div>
+                                }
+                                </div>
                             </div>
-                            <div class="col-6 border-0">
-                                <span class="badge p-2 border w-100 bg-info ">@fav.MenuItem?.FoodType?.Name</span>
-                            </div>
-                            <div class="col-12 p-1 pt-3">
-                                <form method="post" asp-page-handler="Remove">
-                                    <input type="hidden" name="id" value="@fav.Id" />
-                                    <button type="submit" class="btn btn-outline-danger form-control btn-sm" style="height:40px">Remove</button>
-                                </form>
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
-            }
-        </div>
+            </section>
+        }
     }
 </div>

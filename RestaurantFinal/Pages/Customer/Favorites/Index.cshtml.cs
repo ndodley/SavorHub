@@ -19,9 +19,14 @@ namespace RestaurantFinal.Pages.Customer.Favorites
 
         public IEnumerable<Favorite> Favorites { get; set; } = [];
 
+        public IEnumerable<Category> CategoryList { get; set; } = [];
+
         public void OnGet()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            CategoryList = _unitOfWork.Category.GetAll(orderby: u => u.OrderBy(c => c.DisplayOrder));
+
             Favorites = _unitOfWork.Favorite.GetAll(
                 f => f.ApplicationUserId == userId,
                 includeProperties: "MenuItem,MenuItem.Category,MenuItem.FoodType",
