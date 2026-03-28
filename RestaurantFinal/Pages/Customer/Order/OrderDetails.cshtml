@@ -5,36 +5,85 @@
     ViewData["Title"] = "Order Details";
 }
 
-<h2>Order Details</h2>
+<div class="container py-4">
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">Order Details</h1>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <span class="badge bg-secondary rounded-pill">Order #@Model.OrderDetailVM.OrderHeader.Id</span>
+                <span class="badge bg-warning text-dark">@Model.OrderDetailVM.OrderHeader.Status</span>
+                <span class="text-muted small">Placed: @Model.OrderDetailVM.OrderHeader.OrderDate.ToString("MMM dd, yyyy")</span>
+            </div>
+        </div>
+        <a asp-page="/Customer/Order/MyOrders" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left me-2"></i>Back to My Orders
+        </a>
+    </div>
 
-<div>
-    <h4>Order ID: @Model.OrderDetailVM.OrderHeader.Id</h4>
-    <p>Order Date: @Model.OrderDetailVM.OrderHeader.OrderDate.ToString("MM/dd/yyyy")</p>
-    <p>Order Total: @Model.OrderDetailVM.OrderHeader.OrderTotal.ToString("C")</p>
-    <p>Status: @Model.OrderDetailVM.OrderHeader.Status</p>
-    <p>Pick Up Time: @Model.OrderDetailVM.OrderHeader.PickUpTime.ToString("MM/dd/yyyy hh:mm tt")</p>
-    <p>Comments: @Model.OrderDetailVM.OrderHeader.Comments</p>
+    <div class="row g-4">
+        <div class="col-12 col-lg-7">
+            <div class="card app-card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Pickup & Notes</h5>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label text-muted fw-semibold">Pickup Time</label>
+                            <input value="@Model.OrderDetailVM.OrderHeader.PickUpTime.ToString("MMM dd, yyyy • h:mm tt")" disabled class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted fw-semibold">Comments</label>
+                            <textarea disabled class="form-control" rows="3">@Model.OrderDetailVM.OrderHeader.Comments</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+            <div class="card app-card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="fw-bold mb-0">Items</h5>
+                        <span class="text-muted small">@Model.OrderDetailVM.OrderDetails.Count item(s)</span>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        @foreach (var detail in Model.OrderDetailVM.OrderDetails)
+                        {
+                            var item = detail.MenuItem;
+                            var menuItemId = item?.Id;
+                            var imageUrl = item?.Image;
+                            var name = item?.Name ?? "Menu Item";
+
+                            <li class="list-group-item py-3">
+                                <div class="d-flex gap-3">
+                                    <a asp-page="/Customer/Menu/Details" asp-route-id="@menuItemId" class="text-decoration-none" style="width:72px;">
+                                        <img src="@imageUrl" alt="@name" class="rounded shadow-sm" style="width:72px;height:56px;object-fit:cover;" />
+                                    </a>
+
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between gap-2">
+                                            <div>
+                                                <a asp-page="/Customer/Menu/Details" asp-route-id="@menuItemId" class="fw-semibold text-decoration-none">@name</a>
+                                                <div class="text-muted small">Qty: @detail.Count</div>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="fw-semibold">$@((detail.Price * detail.Count).ToString("0.00"))</div>
+                                                <div class="text-muted small">$@detail.Price.ToString("0.00") each</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <span class="fw-bold text-primary">Total (USD)</span>
+                        <strong class="text-primary fs-4">$@Model.OrderDetailVM.OrderHeader.OrderTotal.ToString("0.00")</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<h3>Order Items</h3>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Item Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.OrderDetailVM.OrderDetails)
-        {
-            <tr>
-                <td>@item.MenuItem.Name</td>
-                <td>@item.Price.ToString("C")</td>
-                <td>@item.Count</td>
-                <td>$@(item.Price * item.Count)</td>
-            </tr>
-        }
-    </tbody>
-</table>

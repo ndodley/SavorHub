@@ -60,23 +60,32 @@ namespace RestaurantFinal.Pages.Customer.Menu
 
             ShoppingCart.ApplicationUserId = userId;
 
+            // Clear ALL ModelState (prevents NewReview validation errors from bleeding into this handler)
+            // then re-validate only the ShoppingCart fields relevant to adding to cart.
+            ModelState.Clear();
+            TryValidateModel(ShoppingCart, nameof(ShoppingCart));
+
             if (ModelState.IsValid)
             {
                 ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.GetFirstOrDefault(
-                   filter: u => u.ApplicationUserId == userId &&
-                    u.MenuItemId == ShoppingCart.MenuItemId);
+                    filter: u => u.ApplicationUserId == userId &&
+                                 u.MenuItemId == ShoppingCart.MenuItemId);
 
                 if (shoppingCartFromDb == null)
                 {
                     _unitOfWork.ShoppingCart.Add(ShoppingCart);
                     _unitOfWork.Save();
+                    TempData["success"] = "Item added to cart successfully";
                 }
                 else
                 {
                     _unitOfWork.ShoppingCart.IncrementCount(shoppingCartFromDb, ShoppingCart.Count);
+                    TempData["success"] = "Cart updated successfully";
                 }
                 return RedirectToPage("Index");
             }
+
+            OnGet(ShoppingCart.MenuItemId);
             return Page();
         }
 

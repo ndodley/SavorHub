@@ -4,104 +4,103 @@
 
 <div class="container py-4">
 	<form method="post">
-		<div class="admin-card p-4">
-			<div class="row pb-2 align-items-center">
-				<div class="col-12 col-md-6">
-					<h2 class="text-primary mb-0">
+        <div class="admin-card p-4">
+			<div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-3">
+				<div>
+					<h2 class="text-primary mb-1">
 						<i class="bi bi-receipt me-2"></i>Order Details
 					</h2>
+					<div class="d-flex flex-wrap gap-2 align-items-center">
+						<span class="badge bg-secondary rounded-pill">Order #@Model.OrderDetailVM.OrderHeader.Id</span>
+						<span class="badge bg-warning text-dark">@Model.OrderDetailVM.OrderHeader.Status</span>
+						<span class="text-muted small">Pickup: @Model.OrderDetailVM.OrderHeader.PickUpTime.ToString("MMM dd, yyyy • h:mm tt")</span>
+					</div>
 				</div>
-				<div class="col-12 col-md-4 offset-md-2 mt-3 mt-md-0">
-					<a asp-page="/Admin/Order/OrderList" class="btn btn-outline-warning w-100">
-						<i class="bi bi-arrow-left me-1"></i> Back to Orders
-					</a>
-				</div>
+				<a asp-page="/Admin/Order/OrderList" class="btn btn-outline-warning">
+					<i class="bi bi-arrow-left me-1"></i> Back to Orders
+				</a>
 			</div>
+
 			<hr />
-			<div class="row pt-2">
-				<div class="col-lg-8 col-12 border-end">
-					<div class="form-group row py-1">
-						<div class="col-md-3 col-12 text-muted fw-semibold">
-							Name
-						</div>
-						<div class="col-md-9 col-12">
-							<input asp-for="OrderDetailVM.OrderHeader.PickupName" disabled class="form-control" />
-						</div>
-					</div>
-					<div class="form-group row py-1">
-						<div class="col-md-3 col-12 text-muted fw-semibold">
-							Email
-						</div>
-						<div class="col-md-9 col-12">
-							<input asp-for="OrderDetailVM.OrderHeader.ApplicationUser.Email" disabled class="form-control" />
-						</div>
-					</div>
-					<div class="form-group row py-1">
-						<div class="col-md-3 col-12 text-muted fw-semibold">
-							Phone Number
-						</div>
-						<div class="col-md-9 col-12">
-							<input asp-for="OrderDetailVM.OrderHeader.PhoneNumber" disabled class="form-control" />
-						</div>
-					</div>
-					<div class="form-group row py-1">
-						<div class="col-md-3 col-12 text-muted fw-semibold">
-							Order Total
-						</div>
-						<div class="col-md-9 col-12">
-							<input disabled asp-for="OrderDetailVM.OrderHeader.OrderTotal" class="form-control" />
-						</div>
-					</div>
-					<div class="form-group row py-1">
-						<div class="col-md-3 col-12 text-muted fw-semibold">
-							Pickup Date Time
-						</div>
-						<div class="col-md-9 col-12">
-							<input value="@Model.OrderDetailVM.OrderHeader.PickUpTime.ToShortDateString() @Model.OrderDetailVM.OrderHeader.PickUpTime.ToShortTimeString()" disabled class="form-control" />
-						</div>
-					</div>
-					<div class="form-group row py-1">
-						<div class="col-md-3 col-12 text-muted fw-semibold">
-							Comments
-						</div>
-						<div class="col-md-9 col-12">
-							<textarea asp-for="OrderDetailVM.OrderHeader.Comments" disabled class="form-control" rows="3"></textarea>
+
+			<div class="row g-4">
+				<div class="col-12 col-lg-7">
+					<div class="card app-card shadow-sm border-0">
+						<div class="card-body">
+							<h5 class="fw-bold mb-3">Customer</h5>
+							<div class="row g-3">
+								<div class="col-12">
+									<label class="form-label text-muted fw-semibold">Name</label>
+									<input asp-for="OrderDetailVM.OrderHeader.PickupName" disabled class="form-control" />
+								</div>
+								<div class="col-12">
+									<label class="form-label text-muted fw-semibold">Email</label>
+									<input asp-for="OrderDetailVM.OrderHeader.ApplicationUser.Email" disabled class="form-control" />
+								</div>
+								<div class="col-12">
+									<label class="form-label text-muted fw-semibold">Phone Number</label>
+									<input asp-for="OrderDetailVM.OrderHeader.PhoneNumber" disabled class="form-control" />
+								</div>
+								<div class="col-12">
+									<label class="form-label text-muted fw-semibold">Comments</label>
+									<textarea asp-for="OrderDetailVM.OrderHeader.Comments" disabled class="form-control" rows="3"></textarea>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="col-lg-4 col-12 ps-lg-4 mt-3 mt-lg-0">
-					<button type="submit" disabled class="btn btn-outline-warning w-100 mb-3">
-						@Model.OrderDetailVM.OrderHeader.Status
-					</button>
+				<div class="col-12 col-lg-5">
+					<div class="card app-card shadow-sm border-0">
+						<div class="card-body">
+							<div class="d-flex justify-content-between align-items-center mb-2">
+								<h5 class="fw-bold mb-0">Items</h5>
+								<span class="text-muted small">@Model.OrderDetailVM.OrderDetails.Count item(s)</span>
+							</div>
 
-					<div class="d-flex justify-content-between align-items-center mb-3">
-						<span class="text-muted fw-semibold">Order ID:</span>
-						<span class="badge bg-secondary rounded-pill fs-6">@Model.OrderDetailVM.OrderHeader.Id</span>
+							<ul class="list-group list-group-flush">
+								@foreach (var detail in Model.OrderDetailVM.OrderDetails)
+								{
+									var item = detail.MenuItem;
+									var menuItemId = item?.Id;
+									var imageUrl = item?.Image;
+									var name = item?.Name ?? detail.Name;
+
+									<li class="list-group-item py-3">
+										<div class="d-flex gap-3">
+											<a asp-page="/Customer/Menu/Details" asp-route-id="@menuItemId" class="text-decoration-none" style="width:72px;">
+												<img src="@imageUrl" alt="@name" class="rounded shadow-sm" style="width:72px;height:56px;object-fit:cover;" />
+											</a>
+
+											<div class="flex-grow-1">
+												<div class="d-flex justify-content-between gap-2">
+													<div>
+														<a asp-page="/Customer/Menu/Details" asp-route-id="@menuItemId" class="fw-semibold text-decoration-none">@name</a>
+														<div class="text-muted small">Qty: @detail.Count</div>
+													</div>
+													<div class="text-end">
+														<div class="fw-semibold">$@((detail.Price * detail.Count).ToString("0.00"))</div>
+														<div class="text-muted small">$@detail.Price.ToString("0.00") each</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								}
+							</ul>
+
+							<div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+								<span class="fw-bold text-primary">Total (USD)</span>
+								<strong class="text-primary fs-4">$@Model.OrderDetailVM.OrderHeader.OrderTotal.ToString("0.00")</strong>
+							</div>
+						</div>
 					</div>
 
-					<ul class="list-group mb-3">
-						@foreach (var detail in Model.OrderDetailVM.OrderDetails)
-						{
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								<div>
-									<h6 class="my-0 fw-semibold">@detail.Name</h6>
-									<small class="text-muted">Quantity: @detail.Count</small>
-								</div>
-								<span class="fw-semibold">$@(detail.Price * detail.Count)</span>
-							</li>
-						}
-						<li class="list-group-item d-flex justify-content-between align-items-center border-top border-2">
-							<span class="fw-bold text-primary">Total (USD)</span>
-							<strong class="text-primary fs-5">$@Model.OrderDetailVM.OrderHeader.OrderTotal</strong>
-						</li>
-					</ul>
-
-					<div class="row g-2">
+					<div class="row g-2 mt-3">
 						@if (Model.OrderDetailVM.OrderHeader.Status == SD.StatusReady
-										&& (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.FrontDeskRole)))
+									&& (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.FrontDeskRole)))
 						{
-							<div class="col-12 pb-2">
+							<div class="col-12">
 								<button type="submit" class="btn btn-success w-100"
 										asp-page-handler="OrderCompleted" asp-route-orderId="@Model.OrderDetailVM.OrderHeader.Id">
 									<i class="bi bi-check-circle me-1"></i> Complete Order
@@ -109,9 +108,9 @@
 							</div>
 						}
 						@if ((User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.FrontDeskRole))
-										&& (Model.OrderDetailVM.OrderHeader.Status == SD.StatusReady ||
-										Model.OrderDetailVM.OrderHeader.Status == SD.StatusSubmitted ||
-										Model.OrderDetailVM.OrderHeader.Status == SD.StatusInProcess))
+								&& (Model.OrderDetailVM.OrderHeader.Status == SD.StatusReady ||
+									Model.OrderDetailVM.OrderHeader.Status == SD.StatusSubmitted ||
+									Model.OrderDetailVM.OrderHeader.Status == SD.StatusInProcess))
 						{
 							<div class="col-6">
 								<button type="submit" class="btn btn-outline-warning w-100"

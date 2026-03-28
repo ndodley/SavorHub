@@ -11,7 +11,7 @@
         })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SavourTable</title>
+    <title>@ViewData["Title"] - Savour Table</title>
     <link rel="stylesheet" href="~/css/bootswatch_lux.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
@@ -23,7 +23,7 @@
     <header class="fixed-top">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
             <div class="container">
-                <a class="navbar-brand fw-bold" asp-area="" asp-page="/Index">SavourTable</a>
+                <a class="navbar-brand fw-bold" asp-area="" asp-page="/Index">Savour Table</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -89,7 +89,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - RestaurantFinal - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2025 - Savour Table - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
@@ -105,5 +105,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    @if (TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]');
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script>
+            toastr.error('@TempData["error"]');
+        </script>
+    }
 </body>
 </html>

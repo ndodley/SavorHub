@@ -44,16 +44,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// Use Controllers for MenuItems and OrderList
-app.MapControllers();
-
-app.UseAuthentication();
-
 app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseAntiforgery();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
@@ -61,5 +56,8 @@ app.MapStaticAssets(); // static assets like CSS, JS, images, from wwwroot folde
 
 app.MapRazorPages()
    .WithStaticAssets();
+
+// Controllers for MenuItems and Order APIs
+app.MapControllers();
 
 app.Run();
