@@ -1,10 +1,164 @@
 ﻿@page
 @model IndexModel
+@using Restaurant.Models
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
+    var chunks = Model.FeaturedItems
+        .Select((item, idx) => new { item, idx })
+        .GroupBy(x => x.idx / 3)
+        .Select(g => g.Select(x => x.item).ToList())
+        .ToList();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Hero Section -->
+<div class="rounded-4 py-5 px-4 mb-5 text-white text-center"
+     style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 55%, #0f3460 100%);">
+    <div class="py-2">
+        <p class="text-uppercase text-warning fw-bold mb-2" style="letter-spacing:.2em; font-size:1.1rem;">Welcome to</p>
+        <h1 class="display-3 fw-bold mb-3 text-white">Savour Table</h1>
+        <p class="lead mb-4 mx-auto" style="max-width:560px; color: rgba(255,255,255,0.85);">
+            Handcrafted dishes made with fresh, locally sourced ingredients. Every visit is a new experience worth savouring.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a asp-page="/Customer/Menu/Index" class="btn btn-warning btn-lg px-5 fw-semibold shadow">
+                <i class="bi bi-menu-button-wide me-2"></i>Explore Menu
+            </a>
+            <a asp-page="/Customer/Cart/Index" class="btn btn-outline-light btn-lg px-5">
+                <i class="bi bi-cart me-2"></i>Order Now
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Items Carousel -->
+<section class="mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Featured Items</h2>
+            <p class="text-muted mb-0">Our most popular dishes, rated by customers</p>
+        </div>
+        <a asp-page="/Customer/Menu/Index" class="btn btn-outline-primary">
+            View All <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    @if (Model.FeaturedItems.Any())
+    {
+        <div id="menuCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner pb-2">
+                @for (int i = 0; i < chunks.Count; i++)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row g-4">
+                            @foreach (var item in chunks[i])
+                            {
+                                var rating = Model.MenuItemRatings[item.Id];
+                                <div class="col-12 col-md-4">
+                                    <a asp-page="/Customer/Menu/Details" asp-route-id="@item.Id" class="text-decoration-none">
+                                        <div class="card h-100 shadow-sm border-0 hover-card">
+                                            <div class="position-relative overflow-hidden rounded-top" style="height:210px;">
+                                                <img src="@item.Image"
+                                                     class="w-100 h-100 object-fit-cover"
+                                                     alt="@item.Name" />
+                                                <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark fw-semibold">
+                                                    @item.Category.Name
+                                                </span>
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title fw-semibold mb-1">@item.Name</h5>
+                                                <span class="badge app-food-type-badge mb-2" style="width:fit-content;">
+                                                    @item.FoodType.Name
+                                                </span>
+                                                <div class="d-flex align-items-center gap-1 mb-3">
+                                                    @for (int s = 1; s <= 5; s++)
+                                                    {
+                                                        if (s <= rating.AverageRating)
+                                                        {
+                                                            <i class="bi bi-star-fill text-warning small"></i>
+                                                        }
+                                                        else if (s - 0.5 <= rating.AverageRating)
+                                                        {
+                                                            <i class="bi bi-star-half text-warning small"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="bi bi-star text-muted small"></i>
+                                                        }
+                                                    }
+                                                    @if (rating.ReviewCount > 0)
+                                                    {
+                                                        <span class="text-muted small ms-1">(@rating.ReviewCount)</span>
+                                                    }
+                                                </div>
+                                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                                    <span class="app-price fw-bold fs-5">$@item.Price</span>
+                                                    <span class="btn btn-sm btn-warning text-dark fw-semibold">
+                                                        View Details <i class="bi bi-arrow-right ms-1"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (chunks.Count > 1)
+            {
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    <button class="btn btn-secondary btn-sm px-3" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-secondary btn-sm px-3" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-shop" style="font-size:3rem;"></i>
+            <p class="mt-2">No menu items available yet.</p>
+        </div>
+    }
+</section>
+
+<!-- Why Choose Us -->
+<section class="mb-5">
+    <h2 class="fw-bold text-center mb-4">Why Choose Us</h2>
+    <div class="row g-4 text-center">
+        <div class="col-12 col-md-4">
+            <div class="p-4 rounded-4 border app-card h-100">
+                <h5 class="fw-bold">Fresh Ingredients</h5>
+                <p class="text-muted mb-0">Every dish is crafted using locally sourced, fresh ingredients for maximum flavour and nutrition.</p>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="p-4 rounded-4 border app-card h-100">
+                <i class="bi bi-lightning-charge-fill text-warning mb-3" style="font-size:2.5rem;"></i>
+                <h5 class="fw-bold">Fast Service</h5>
+                <p class="text-muted mb-0">We value your time. Quick preparation and delivery without ever compromising on quality.</p>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="p-4 rounded-4 border app-card h-100">
+                <i class="bi bi-star-fill text-warning mb-3" style="font-size:2.5rem;"></i>
+                <h5 class="fw-bold">Top Rated</h5>
+                <p class="text-muted mb-0">Consistently rated 5 stars by our customers for both food quality and exceptional service.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call To Action Banner -->
+<div class="rounded-4 p-5 text-center mb-2" style="background: linear-gradient(90deg, #0f3460 0%, #16213e 100%);">
+    <h3 class="text-white fw-bold mb-2">Ready to order?</h3>
+    <p class="text-white-50 mb-4">Browse our full menu and add your favourites to the cart.</p>
+    <a asp-page="/Customer/Menu/Index" class="btn btn-warning btn-lg px-5 fw-semibold shadow">
+        <i class="bi bi-menu-button-wide me-2"></i>View Full Menu
+    </a>
 </div>

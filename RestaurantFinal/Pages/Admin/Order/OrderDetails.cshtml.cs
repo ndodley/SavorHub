@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.CodeAnalysis;
 using Restaurant.Data.Repository.IRepository;
 using Restaurant.Models;
 using Restaurant.Models.ViewModel;
@@ -22,7 +21,7 @@ namespace RestaurantFinal.Pages.Admin.Order
             OrderDetailVM = new()
             {
                 OrderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id, includeProperties: "ApplicationUser"),
-                OrderDetails = _unitOfWork.OrderDetail.GetAll(u => u.OrderId == id).ToList()
+                OrderDetails = _unitOfWork.OrderDetail.GetAll(u => u.OrderId == id, includeProperties: "MenuItem").ToList()
             };
         }
 

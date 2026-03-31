@@ -3,8 +3,15 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <script>
+        // Prevent flash of wrong theme — runs before CSS paints
+        (function () {
+            var t = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', t);
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RestaurantFinal</title>
+    <title>@ViewData["Title"] - Savour Table</title>
     <link rel="stylesheet" href="~/css/bootswatch_lux.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
@@ -13,60 +20,63 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary box-shadow mb-3">
+    <header class="fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Restaurant Final</a>
+                <a class="navbar-brand fw-bold" asp-area="" asp-page="/Index">Savour Table</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                    <ul class="navbar-nav me-auto align-items-center">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/Customer/Menu/Index">Menu</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Customer/Reviews/MyReviews">My Reviews</a>
-                        </li>
-                        @if (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.FrontDeskRole))
+                        @if (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.FrontDeskRole) || User.IsInRole(SD.KitchenRole))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-page="/Admin/Order/OrderList">Order List</a>
-                            </li>
-                        }
-                        @if (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.KitchenRole))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-page="/Admin/Order/ManageOrder">Manage Order</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Operations</a>
+                                <ul class="dropdown-menu">
+                                    @if (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.FrontDeskRole))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Admin/Order/OrderList"><i class="bi bi-list-check me-2"></i>Order List</a></li>
+                                    }
+                                    @if (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.KitchenRole))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Admin/Order/ManageOrder"><i class="bi bi-journal-check me-2"></i>Manage Order</a></li>
+                                    }
+                                </ul>
                             </li>
                         }
                         @if (User.IsInRole(SD.ManagerRole))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-area="" asp-page="/Admin/Categories/Index">Categories</a>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Admin/FoodTypes/Index">Food Types</a>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Admin/MenuItems/Index">Menu Items</a>
-
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register Employee</a>
-                                </div>
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Admin</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Admin/Categories/Index"><i class="bi bi-tag me-2"></i>Categories</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Admin/FoodTypes/Index"><i class="bi bi-grid me-2"></i>Food Types</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Admin/MenuItems/Index"><i class="bi bi-journal-text me-2"></i>Menu Items</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Admin/Reviews/Index"><i class="bi bi-chat-dots me-2"></i>Reviews</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-person-plus me-2"></i>Register Employee</a></li>
+                                </ul>
                             </li>
                         }
+                    </ul>
+                    <ul class="navbar-nav align-items-center gap-2">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Customer/Order/MyOrders">MyOrders</a>
+                            <button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                                <i class="bi bi-moon-fill"></i>
+                            </button>
                         </li>
-                        <li>
-                            <a class="nav-link text-white-50" asp-area="" asp-page="/Customer/Cart/Index">
-                                <i class="bi bi-cart"></i>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Customer/Cart/Index">
+                                <i class="bi bi-cart fs-5"></i>
                             </a>
                         </li>
-                    </ul>
-                    <div class="d-flex align-items-center">
                         <partial name="_LoginPartial" />
-                    </div>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -79,7 +89,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - RestaurantFinal - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2025 - Savour Table - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
@@ -95,5 +105,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    @if (TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]');
+        </script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script>
+            toastr.error('@TempData["error"]');
+        </script>
+    }
 </body>
 </html>

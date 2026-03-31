@@ -3,86 +3,76 @@
 
 @{
 	var status = HttpContext.Request.Query["status"];
-	var cancelled = "text-primary";
-	var completed = "text-primary";
-	var inProcess = "text-primary";
-	var ready = "text-primary";
-	var all = "text-primary";
+	var cancelled = "";
+	var completed = "";
+	var inProcess = "";
+	var ready = "";
+	var all = "";
 
 	if (status == "cancelled")
 	{
-		cancelled = "active text-white";
+		cancelled = "active";
+	}
+	else if (status == "completed")
+	{
+		completed = "active";
+	}
+	else if (status == "ready")
+	{
+		ready = "active";
+	}
+	else if (status == "all")
+	{
+		all = "active";
 	}
 	else
 	{
-		if (status == "completed")
-		{
-			completed = "active text-white";
-		}
-		else
-		{
-			if (status == "ready")
-			{
-				ready = "active text-white";
-			}
-			else if (status == "all")
-			{
-				all = "active text-white";
-			}
-			else
-			{
-				inProcess = "active text-white";
-			}
-		}
+		inProcess = "active";
 	}
-
 }
 
-<div class="container p-3">
-	<div class="d-flex justify-content-between">
-		<div class="p-2">
-			<h2 class="text-primary">Order List</h2>
-		</div>
-		<div class="p-2">
-			<ul class="list-group list-group-horizontal-sm">
-				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="all">
-					<li class="list-group-item @all">All</li>
-				</a>
-				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="inprocess">
-					<li class="list-group-item @inProcess">InProcess</li>
-				</a>
-				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="ready">
-					<li class="list-group-item @ready">Ready For PickUp</li>
-				</a>
-				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="completed">
-					<li class="list-group-item @completed">Completed</li>
-				</a>
-				<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="cancelled">
-					<li class="list-group-item @cancelled">Cancelled</li>
-				</a>
-			</ul>
-		</div>
+<div class="container py-4">
+	<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+		<h2 class="text-primary mb-0">
+			<i class="bi bi-receipt me-2"></i>Order List
+		</h2>
+		<ul class="list-group list-group-horizontal order-status-nav flex-wrap">
+			<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="all">
+				<li class="list-group-item @all">All</li>
+			</a>
+			<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="inprocess">
+				<li class="list-group-item @inProcess">In Process</li>
+			</a>
+			<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="ready">
+				<li class="list-group-item @ready">Ready For Pickup</li>
+			</a>
+			<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="completed">
+				<li class="list-group-item @completed">Completed</li>
+			</a>
+			<a style="text-decoration:none;" asp-page="OrderList" asp-route-status="cancelled">
+				<li class="list-group-item @cancelled">Cancelled</li>
+			</a>
+		</ul>
 	</div>
 
-	<br /><br />
-
-	<table id="DT_load" class="table table-bordered table-striped" style="width:100%">
-		<thead>
-			<tr>
-				<th>Order ID</th>
-				<th>Name</th>
-				<th>Email</th>
-				<th>Order Total</th>
-				<th>Pickup Time</th>
-				@if (status == "all")
-				{
-                    <th>Status</th>
-                }
-				<th></th>
-			</tr>
-		</thead>
-	</table>
-
+	<div class="admin-card p-3">
+		<table id="DT_load" class="table table-hover table-striped table-bordered" style="width:100%">
+			<thead class="admin-thead">
+				<tr>
+					<th>Order ID</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Order Total</th>
+					<th>Pickup Time</th>
+					@if (status == "all")
+					{
+						<th>Status</th>
+					}
+					<th></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
 </div>
 
 @section Scripts {

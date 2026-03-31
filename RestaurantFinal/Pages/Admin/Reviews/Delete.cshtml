@@ -1,0 +1,71 @@
+@page "{id:int}"
+@model RestaurantFinal.Pages.Admin.Reviews.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Review";
+}
+
+<div class="container py-4">
+    <form method="post">
+        <input asp-for="Review.Id" hidden />
+
+        <div class="admin-card p-4">
+            <h2 class="text-primary mb-1">
+                <i class="bi bi-trash-fill me-2"></i>Delete Review
+            </h2>
+            <hr />
+
+            <div class="alert alert-warning">
+                Are you sure you want to delete this review?
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Menu Item</label>
+                <div class="d-flex align-items-center gap-2">
+                    <a asp-page="/Customer/Menu/Details" asp-route-id="@Model.Review.MenuItemId" class="d-inline-block" tabindex="-1" aria-hidden="true">
+                        @if (!string.IsNullOrWhiteSpace(Model.Review.MenuItem?.Image))
+                        {
+                            <img src="@Model.Review.MenuItem.Image" alt="@Model.Review.MenuItem?.Name" style="width:64px;height:64px;object-fit:cover;border-radius:10px;" />
+                        }
+                        else
+                        {
+                            <div class="app-food-type-badge d-flex align-items-center justify-content-center" style="width:64px;height:64px;border-radius:10px;">
+                                <i class="bi bi-image fs-4"></i>
+                            </div>
+                        }
+                    </a>
+                    <div>
+                        <a asp-page="/Customer/Menu/Details" asp-route-id="@Model.Review.MenuItemId" class="text-decoration-none">
+                            <span class="fw-semibold">@Model.Review.MenuItem?.Name</span>
+                        </a>
+                        <div class="text-muted" style="font-size:0.9rem;">@Model.Review.MenuItem?.Category?.Name • @Model.Review.MenuItem?.FoodType?.Name</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">User</label>
+                <input value="@Model.Review.ApplicationUser?.Name" class="form-control" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Rating</label>
+                <input value="@Model.Review.Rating" class="form-control" disabled />
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Content</label>
+                <textarea class="form-control" rows="5" disabled>@Model.Review.Content</textarea>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger" style="min-width:130px">
+                    <i class="bi bi-trash-fill me-1"></i> Delete
+                </button>
+                <a asp-page="Index" class="btn btn-outline-secondary" style="min-width:130px">
+                    <i class="bi bi-arrow-left me-1"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
