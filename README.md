@@ -1,280 +1,309 @@
-# Savour Table
+<div align="center">
 
-> *A modern restaurant ordering & management platform — à la carte for the digital age.*
+# 🍽️ Savour Table
 
-A full-stack Razor Pages app built with **.NET 10**. Customers browse the menu, add items to a cart, and place orders. Staff manage menu content via Admin pages and process live orders via Operations pages. The UI supports **Light/Dark mode** with a persistent theme toggle.
+A full-stack restaurant ordering and management platform built with **.NET 10** and ASP.NET Core Razor Pages.  
+Customers browse the menu, add items to a cart, and pay via Stripe.  
+Staff manage menu content and process live orders through role-based Operations pages.  
+Supports persistent **Light / Dark mode**.
 
-## Tech Stack
+<br>
+
+![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-Razor_Pages-512BD4?logo=dotnet&logoColor=white)
+![EF Core](https://img.shields.io/badge/EF_Core-SQL_Server-CC2927?logo=microsoftsqlserver&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-Checkout-635BFF?logo=stripe&logoColor=white)
+![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5-7952B3?logo=bootstrap&logoColor=white)
+
+</div>
+
+---
+
+## 🛠️ Tech Stack
 
 | Layer | Technology |
-|---|---|
-| Framework | .NET 10 + ASP.NET Core Razor Pages |
-| ORM | Entity Framework Core (SQL Server / SQLite) |
+|:---|:---|
+| Framework | .NET 10 · ASP.NET Core Razor Pages |
+| ORM | Entity Framework Core (SQL Server) |
 | Auth | ASP.NET Core Identity |
-| UI | Bootstrap 5 + Bootswatch (Lux) |
-| JS Libraries | DataTables, SweetAlert2, Toastr, TinyMCE |
+| Payments | Stripe Checkout |
+| UI | Bootstrap 5 · Bootswatch Lux |
+| JS | DataTables · SweetAlert2 · Toastr · TinyMCE |
 
-## Key Features
+---
 
-**Customer**
-- Browse menu by category with a per-category carousel
-- Featured items carousel on the home page
-- Item detail page with reviews and add-to-cart
-- Cart, checkout, and order history
-- Favourites and personal reviews
+## ✨ Features
 
-**Admin** *(Manager role)*
-- Manage Categories, Food Types, and Menu Items
-- Rich-text item editing via TinyMCE with image upload
-- Bulk CSV import/export for menu items
-- Moderate customer reviews
+| Area | Highlights |
+|:---|:---|
+| **Customer** | Menu browsing by category, featured items carousel, item detail with reviews, cart, Stripe checkout, order history, favourites |
+| **Admin** *(Manager)* | CRUD for categories, food types, and menu items; TinyMCE rich-text editor; image upload; bulk CSV import/export; review moderation |
+| **Operations** *(Manager / Front Desk / Kitchen)* | Live order queue with status filter pills; progress orders Submitted → In Process → Ready; complete, cancel, and refund actions |
 
-**Operations** *(Manager / Front Desk / Kitchen)*
-- Live order queue with status filter pills
-- Progress orders: Submitted → In Process → Ready
-- Order detail view with complete, cancel, and refund actions
+---
 
-**UI**
-- Persistent Light/Dark mode toggle
-- Dark-mode-safe styling across all admin and operations pages
+## 🏗️ Architecture
 
-## Project Structure
+Four-project N-tier solution:
 
+| Project | Role |
+|:---|:---|
+| `RestaurantFinal` | Razor Pages presentation layer, controllers |
+| `Restaurant.Data` | EF Core `DbContext`, Repository Pattern, Unit of Work |
+| `Restaurant.Models` | Domain entities (`MenuItem`, `OrderHeader`, `Review`, …) |
+| `Restaurant.Utility` | Shared role and status constants (`SD.cs`) |
+
+**Patterns used:** Repository Pattern · Unit of Work · Dependency Injection · `ApplicationUser : IdentityUser`
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# 1. Clone and open the solution in Visual Studio
+# 2. Set RestaurantFinal as the startup project
+# 3. Update the connection string in appsettings.json
+# 4. Apply migrations (Package Manager Console)
+Update-Database
+# 5. Run
 ```
-RestaurantFinal/          # Razor Pages web app
-├── Pages/
-│   ├── Customer/         # Customer-facing pages
-│   ├── Admin/            # Admin + Operations pages
-│   └── Shared/           # Layout and partials
-├── wwwroot/
-│   ├── css/site.css      # Theme tokens and utilities
-│   └── js/               # UI scripts (theme toggle, DataTables, etc.)
-Restaurant.Data/          # EF Core, repositories, UnitOfWork
-Restaurant.Utility/       # Shared constants (roles, statuses)
-```
 
-## Architecture
-
-The solution follows an **N-tier architecture** split across four projects:
-
-| Tier | Project | Responsibility |
-|---|---|---|
-| Presentation | `RestaurantFinal` | Razor Pages, UI, controllers |
-| Data Access | `Restaurant.Data` | EF Core DbContext, repositories, migrations |
-| Domain Models | `Restaurant.Models` | Entity classes (MenuItem, Order, Review, etc.) |
-| Utilities | `Restaurant.Utility` | Shared constants (roles, order statuses) |
-
-**Design patterns & principles used:**
-
-- **Repository Pattern** — A generic `IRepository<T>` base interface provides common CRUD operations. Each entity (Category, MenuItem, Order, etc.) has its own typed interface and implementation, keeping data access concerns isolated from the presentation layer.
-- **Unit of Work** — `IUnitOfWork` aggregates all repositories behind a single interface and exposes a `Save()` method to commit changes atomically. Page models depend only on `IUnitOfWork`, never on concrete repository classes.
-- **Dependency Injection** — `IUnitOfWork` is registered as a scoped service in `Program.cs` (`builder.Services.AddScoped<IUnitOfWork, UnitOfWork>()`). Razor Page models receive it via constructor injection, keeping them loosely coupled and testable.
-- **OOP principles** — Abstraction via interfaces, generics via the base repository, and inheritance via `ApplicationUser : IdentityUser` for extended Identity fields.
-
-## Getting Started
-
-1. Clone the repo and open the solution in Visual Studio.
-2. Restore NuGet packages.
-3. Set the startup project to `RestaurantFinal`.
-4. Update the connection string in `appsettings.json`.
-5. Apply EF Core migrations: `Update-Database` in Package Manager Console.
-6. Run the app.
-
-## Pages
-
-### Customer
-
-| Page | URL | Description |
-|---|---|---|
-| Home | `/` | Hero, featured items carousel, Why Choose Us |
-| Menu | `/Customer/Menu` | All items grouped by category |
-| Menu Item Details | `/Customer/Menu/Details?id=` | Image, description, price, reviews |
-| Cart | `/Customer/Cart` | Cart contents, quantities, remove items |
-| Checkout Summary | `/Customer/Cart/Summary` | Review order before placing |
-| Order Confirmation | `/Customer/Cart/OrderConfirmation` | Post-checkout confirmation |
-| My Orders | `/Customer/Order/MyOrders` | Customer order history |
-| Order Details | `/Customer/Order/OrderDetails?id=` | Individual order summary |
-| Favourites | `/Customer/Favorites` | Saved favourite menu items |
-| My Reviews | `/Customer/Reviews/MyReviews` | Reviews the customer has written |
-
-### Admin *(Manager role required)*
-
-| Page | URL | Description |
-|---|---|---|
-| Categories — List | `/Admin/Categories` | All categories in a DataTables table |
-| Categories — Create | `/Admin/Categories/Create` | Add a new category |
-| Categories — Edit | `/Admin/Categories/Edit?id=` | Edit an existing category |
-| Categories — Delete | `/Admin/Categories/Delete?id=` | Confirm delete |
-| Food Types — List | `/Admin/FoodTypes` | All food types in a table |
-| Food Types — Create | `/Admin/FoodTypes/Create` | Add a new food type |
-| Food Types — Edit | `/Admin/FoodTypes/Edit?id=` | Edit a food type |
-| Food Types — Delete | `/Admin/FoodTypes/Delete?id=` | Confirm delete |
-| Menu Items — List | `/Admin/MenuItems` | DataTables list + CSV import/export |
-| Menu Items — Create/Edit | `/Admin/MenuItems/Upsert` | Add or edit a menu item |
-| Reviews — List | `/Admin/Reviews` | All customer reviews |
-| Reviews — Edit | `/Admin/Reviews/Edit?id=` | Moderate/edit a review |
-| Reviews — Delete | `/Admin/Reviews/Delete?id=` | Confirm delete |
-| Register Employee | `/Identity/Account/Register` | Create a staff account |
-
-### Operations *(Manager / Front Desk / Kitchen roles)*
-
-| Page | URL | Description |
-|---|---|---|
-| Order List | `/Admin/Order/OrderList` | All orders with status filter pills |
-| Manage Orders | `/Admin/Order/ManageOrder` | Progress orders through workflow |
-| Order Details | `/Admin/Order/OrderDetails?id=` | Full order summary, complete/cancel/refund |
-
-## Screenshots
-
-### Not Signed In
-
-#### Home Page
-Public landing page with a hero banner, featured items carousel, and "Why Choose Us" section.
-
-<img width="1916" height="1029" alt="image" src="https://github.com/user-attachments/assets/27f1cc88-087c-45a9-befb-1c5bbab62811" />
-<img width="1911" height="1032" alt="image" src="https://github.com/user-attachments/assets/553cdd78-a7f7-4f19-8a7b-40b750923378" />
-
-#### Menu Page
-All menu items grouped by category with a Bootstrap carousel per category. Each card shows the item image, name, price, food type badge, star rating, and a favourites toggle.
-
-<img width="1916" height="1033" alt="image" src="https://github.com/user-attachments/assets/c73b0284-d10a-49a1-bf1b-0bf68913f8be" />
-<img width="1915" height="1029" alt="image" src="https://github.com/user-attachments/assets/2d51acb4-be28-4f5b-883c-c3b2507bbb1a" />
-<img width="1916" height="1030" alt="image" src="https://github.com/user-attachments/assets/c34c44d9-3aeb-479e-9049-08b1cc23d9fe" />
-<img width="1916" height="1031" alt="image" src="https://github.com/user-attachments/assets/48c92168-3dad-4c3e-93cf-3e5f3a966adc" />
-
-#### Menu Item Details Page
-Full detail view with image, description, category/food-type badges, price, quantity selector, and customer reviews.
-
-<img width="1916" height="1030" alt="image" src="https://github.com/user-attachments/assets/6f5838a9-22a7-4c84-b704-54e092a000d2" />
+> ⚠️ Never commit real API keys or connection strings to source control.
 
 ---
 
-### Login / Register
+## 📄 Pages
 
-#### Login Page
-Standard ASP.NET Core Identity login form. Returns the user to their previous page after signing in.
+<details>
+<summary><strong>Customer pages</strong></summary>
+<br>
 
-<img width="1917" height="1031" alt="image" src="https://github.com/user-attachments/assets/0b5613ef-b164-4331-b812-11b08e41738a" />
+| Page | URL |
+|:---|:---|
+| Home | `/` |
+| Menu | `/Customer/Menu` |
+| Item Details | `/Customer/Menu/Details?id=` |
+| Cart | `/Customer/Cart` |
+| Checkout Summary | `/Customer/Cart/Summary` |
+| Order Confirmation | `/Customer/Cart/OrderConfirmation` |
+| My Orders | `/Customer/Order/MyOrders` |
+| Order Details | `/Customer/Order/OrderDetails?id=` |
+| Favourites | `/Customer/Favorites` |
+| My Reviews | `/Customer/Reviews/MyReviews` |
 
-#### Register Page
-Customer self-registration form. Staff accounts are created by a Manager via the Register Employee page.
+</details>
 
-<img width="1917" height="1028" alt="image" src="https://github.com/user-attachments/assets/2dc084ab-01c4-402d-a20e-051a4f4688d2" />
+<details>
+<summary><strong>Admin pages</strong> <em>(Manager role)</em></summary>
+<br>
 
----
+| Page | URL |
+|:---|:---|
+| Categories | `/Admin/Categories` |
+| Food Types | `/Admin/FoodTypes` |
+| Menu Items | `/Admin/MenuItems` |
+| Menu Item Create/Edit | `/Admin/MenuItems/Upsert` |
+| Reviews | `/Admin/Reviews` |
+| Register Employee | `/Identity/Account/Register` |
 
-### Customer (Signed In)
+</details>
 
-#### Home Page
-Navbar updates to show the cart icon, account menu, and role-based links. Content is identical to the public view.
+<details>
+<summary><strong>Operations pages</strong> <em>(Manager / Front Desk / Kitchen)</em></summary>
+<br>
 
-<img width="1919" height="1032" alt="image" src="https://github.com/user-attachments/assets/9bed6817-3862-4191-9f92-eb3773a9a2f4" />
+| Page | URL |
+|:---|:---|
+| Order List | `/Admin/Order/OrderList` |
+| Manage Orders | `/Admin/Order/ManageOrder` |
+| Order Details | `/Admin/Order/OrderDetails?id=` |
 
-#### Cart Page
-Lists cart items with image, name, category, unit price, and quantity controls. Shows a running order total.
-
-<img width="1917" height="1030" alt="image" src="https://github.com/user-attachments/assets/b64e1a6d-7cc9-4f67-9739-35821a109999" />
-
-#### Checkout Summary Page
-Order review before placing. Shows contact details, requested pickup time, optional comments, and a final itemised total.
-
-<img width="1917" height="1030" alt="image" src="https://github.com/user-attachments/assets/fc67d6dd-f9d0-4eeb-83fa-ec9982660b94" />
-
-#### Order Confirmation Page
-Shown after a successful order is placed. Displays the assigned order ID and a link to view order history.
-
-<img width="1916" height="1030" alt="image" src="https://github.com/user-attachments/assets/59820e20-a31f-4af0-aa58-6aecdebbbd35" />
-
-#### My Orders Page
-Chronological list of all orders for the logged-in customer, showing order ID, date, total, and status.
-
-<img width="1916" height="1030" alt="image" src="https://github.com/user-attachments/assets/0a18467c-27e0-4ca6-9cb6-c5c4399ddf88" />
-
-#### Order Details Page
-Full summary of a single order with pickup time, comments, and an itemised list. Each item thumbnail links back to its menu detail page.
-
-<img width="1916" height="1028" alt="image" src="https://github.com/user-attachments/assets/48823ec2-191d-4e68-9749-9c17c7c79afe" />
-
-#### Favourites Page
-Saved items grouped by category in a carousel matching the Menu page. Heart button removes items from favourites.
-
-<img width="1917" height="1030" alt="image" src="https://github.com/user-attachments/assets/fdae8fbe-fa4e-4585-89dc-f135fd14312b" />
-<img width="1916" height="1032" alt="image" src="https://github.com/user-attachments/assets/8f0f2441-6ee7-4f3b-9c61-28280e93ffa4" />
-
-#### My Reviews Page
-All reviews submitted by the logged-in customer. Customers can edit or delete their own reviews.
-
-<img width="1920" height="1031" alt="image" src="https://github.com/user-attachments/assets/5c0efb39-6957-4e1e-8ab2-50f4c03dfe79" />
+</details>
 
 ---
 
-### Admin *(Manager role)*
+## 📸 Screenshots
 
-#### Categories List Page
-DataTables table of all categories with create, edit, and delete actions.
+<details>
+<summary><strong>🏠 Public — Home &amp; Menu</strong></summary>
+<br>
 
-<img width="1916" height="1028" alt="image" src="https://github.com/user-attachments/assets/27ce7efe-efc3-4072-bd3f-8b488a9921d7" />
+**Home page** — hero banner, featured items carousel, Why Choose Us section.
 
-#### Categories Create/Edit Page
-Form to add or edit a category, including a display-order field that controls the order categories appear on the Menu page.
+<img width="1916" alt="Home page" src="https://github.com/user-attachments/assets/27f1cc88-087c-45a9-befb-1c5bbab62811" />
 
-<img width="1916" height="1025" alt="image" src="https://github.com/user-attachments/assets/29ecf19b-043a-4269-a754-f2ce4fca31ef" />
+<img width="1911" alt="Home page scrolled" src="https://github.com/user-attachments/assets/553cdd78-a7f7-4f19-8a7b-40b750923378" />
 
-#### Food Types List Page
-Table of all food types (e.g. Vegetarian, Vegan, Gluten-Free) with create, edit, and delete actions.
+<br>
 
-<img width="1916" height="1029" alt="image" src="https://github.com/user-attachments/assets/c57539cf-7e79-41e5-b990-061837e1c3f5" />
+**Menu page** — items grouped by category, per-category carousel, food type badge, star rating, and favourites toggle.
 
-#### Food Types Create/Edit Page
-Form to add or edit a food type. Used to tag menu items for dietary filtering.
+<img width="1916" alt="Menu" src="https://github.com/user-attachments/assets/c73b0284-d10a-49a1-bf1b-0bf68913f8be" />
 
-<img width="1916" height="1030" alt="image" src="https://github.com/user-attachments/assets/1ad3927f-10ab-4b57-96ef-95d0c2e42d67" />
+<img width="1915" alt="Menu carousel" src="https://github.com/user-attachments/assets/2d51acb4-be28-4f5b-883c-c3b2507bbb1a" />
 
-#### Menu Items List Page
-Full DataTables listing with search, sort, and pagination. Includes bulk CSV import and export.
+<img width="1916" alt="Menu dark mode" src="https://github.com/user-attachments/assets/c34c44d9-3aeb-479e-9049-08b1cc23d9fe" />
 
-<img width="1916" height="1029" alt="image" src="https://github.com/user-attachments/assets/a6565111-281e-4504-b63b-17cafc5c8fc6" />
-<img width="1916" height="1030" alt="image" src="https://github.com/user-attachments/assets/ac01fb1e-c2c1-416e-9a33-b5895eda57ec" />
+<img width="1916" alt="Menu dark mode scrolled" src="https://github.com/user-attachments/assets/48c92168-3dad-4c3e-93cf-3e5f3a966adc" />
 
-#### Menu Item Upsert Page
-Combined create/edit form. Fields include name, description (TinyMCE rich-text), price, category, food type, and image upload.
+<br>
 
-<img width="1917" height="1029" alt="image" src="https://github.com/user-attachments/assets/ffc14342-9623-4a62-8f8f-2984d66a25b4" />
-<img width="1917" height="1030" alt="image" src="https://github.com/user-attachments/assets/16a9668b-bd90-42b8-bded-55fb3e5bac11" />
+**Item details** — image, description, category / food-type badges, price, quantity selector, and customer reviews.
 
-#### Reviews List Page
-All customer reviews across every menu item. Managers can edit or delete any review.
+<img width="1916" alt="Item details" src="https://github.com/user-attachments/assets/6f5838a9-22a7-4c84-b704-54e092a000d2" />
 
-<img width="1915" height="1028" alt="image" src="https://github.com/user-attachments/assets/c1920f01-3e66-4662-be02-cd70a6d02386" />
-
-#### Register Employee Page
-Account creation form for staff. A Manager assigns the employee's role (Front Desk, Kitchen, or Manager) during registration.
-
-<img width="1917" height="1027" alt="image" src="https://github.com/user-attachments/assets/01bbffcb-7295-46ee-8b50-e2a1f19a0f9f" />
+</details>
 
 ---
 
-### Operations *(Manager / Front Desk / Kitchen roles)*
+<details>
+<summary><strong>🔐 Login &amp; Register</strong></summary>
+<br>
 
-#### Order List
-All orders with status filter pills (Submitted, In Process, Ready, Completed, Cancelled).
+<img width="1917" alt="Login" src="https://github.com/user-attachments/assets/0b5613ef-b164-4331-b812-11b08e41738a" />
 
-<img width="1918" height="1028" alt="image" src="https://github.com/user-attachments/assets/d8153b7f-3434-40a9-8adc-3c4b858f778a" />
+<img width="1917" alt="Register" src="https://github.com/user-attachments/assets/2dc084ab-01c4-402d-a20e-051a4f4688d2" />
 
-#### Order Details
-Full order summary with customer info, pickup time, comments, and a clickable itemised list. Authorised roles can complete, cancel, or refund the order.
-
-<img width="1916" height="1030" alt="image" src="https://github.com/user-attachments/assets/8d38b958-89b8-45e1-be8c-b49d37b12636" />
-
-#### Manage Orders
-Kitchen/front-desk view for progressing orders: Submitted → In Process → Ready. Action buttons adapt to the current status and the user's role.
-
-<img width="1914" height="1028" alt="image" src="https://github.com/user-attachments/assets/c0a51106-ea41-42cc-af99-48f388e53769" />
-<img width="1917" height="1030" alt="image" src="https://github.com/user-attachments/assets/d6095ef4-16e4-4a0c-bf58-f9926598b900" />
+</details>
 
 ---
 
-## Notes
+<details>
+<summary><strong>🛒 Customer — Ordering Flow</strong></summary>
+<br>
 
-- Role and status constants are defined in `Restaurant.Utility/SD.cs`.
-- Do not commit real credentials or secret keys to source control.
+**Home (signed in)** — navbar shows cart icon, account menu, and role-based links.
+
+<img width="1919" alt="Home signed in" src="https://github.com/user-attachments/assets/9bed6817-3862-4191-9f92-eb3773a9a2f4" />
+
+<br>
+
+**Cart** — item list with quantity controls and running order total.
+
+<img width="1918" alt="Cart" src="https://github.com/user-attachments/assets/285e9093-2fce-4437-8a3d-a95a6fede635" />
+
+<br>
+
+**Order summary** — contact details, pickup time, optional comments, and itemised total before placing.
+
+<img width="1918" alt="Order summary" src="https://github.com/user-attachments/assets/58185fc0-651f-4d98-8cf2-bf341434a335" />
+
+<br>
+
+**Stripe checkout** — card payment form.
+
+<img width="1916" alt="Stripe checkout" src="https://github.com/user-attachments/assets/5c4b8ca8-1ab5-4be4-a898-f4da4b00a5f1" />
+
+<br>
+
+**Order confirmation** — assigned order ID, purchased items with clickable images, and links to order history.
+
+<img width="1915" alt="Order confirmation" src="https://github.com/user-attachments/assets/7ee7de1e-b19d-4dc8-b707-0f53a7ccbef2" />
+
+<img width="1915" alt="Order confirmation items" src="https://github.com/user-attachments/assets/fcb67e5f-e879-45ad-bc70-5adf8219436f" />
+
+</details>
+
+---
+
+<details>
+<summary><strong>📦 Customer — Orders, Favourites &amp; Reviews</strong></summary>
+<br>
+
+**My orders** — chronological order history with ID, date, total, and status.
+
+<img width="1916" alt="My orders" src="https://github.com/user-attachments/assets/0a18467c-27e0-4ca6-9cb6-c5c4399ddf88" />
+
+<br>
+
+**Order details** — full summary with pickup time, comments, and itemised list. Thumbnails link to menu detail pages.
+
+<img width="1916" alt="Order details" src="https://github.com/user-attachments/assets/48823ec2-191d-4e68-9749-9c17c7c79afe" />
+
+<br>
+
+**Favourites** — saved items in a category carousel. Heart button removes an item.
+
+<img width="1917" alt="Favourites" src="https://github.com/user-attachments/assets/fdae8fbe-fa4e-4585-89dc-f135fd14312b" />
+
+<img width="1916" alt="Favourites dark" src="https://github.com/user-attachments/assets/8f0f2441-6ee7-4f3b-9c61-28280e93ffa4" />
+
+<br>
+
+**My reviews** — all reviews written by the customer with edit and delete actions.
+
+<img width="1920" alt="My reviews" src="https://github.com/user-attachments/assets/5c0efb39-6957-4e1e-8ab2-50f4c03dfe79" />
+
+</details>
+
+---
+
+<details>
+<summary><strong>⚙️ Admin</strong> <em>(Manager role)</em></summary>
+<br>
+
+**Categories** — DataTables list and create/edit form with display-order control.
+
+<img width="1916" alt="Categories list" src="https://github.com/user-attachments/assets/27ce7efe-efc3-4072-bd3f-8b488a9921d7" />
+
+<img width="1916" alt="Categories edit" src="https://github.com/user-attachments/assets/29ecf19b-043a-4269-a754-f2ce4fca31ef" />
+
+<br>
+
+**Food types** — manage dietary tags (Vegetarian, Vegan, Gluten-Free, etc.).
+
+<img width="1916" alt="Food types list" src="https://github.com/user-attachments/assets/c57539cf-7e79-41e5-b990-061837e1c3f5" />
+
+<img width="1916" alt="Food types edit" src="https://github.com/user-attachments/assets/1ad3927f-10ab-4b57-96ef-95d0c2e42d67" />
+
+<br>
+
+**Menu items** — searchable DataTables list with CSV import/export and a combined create/edit form (TinyMCE, image upload).
+
+<img width="1916" alt="Menu items list" src="https://github.com/user-attachments/assets/a6565111-281e-4504-b63b-17cafc5c8fc6" />
+
+<img width="1916" alt="Menu items CSV" src="https://github.com/user-attachments/assets/ac01fb1e-c2c1-416e-9a33-b5895eda57ec" />
+
+<img width="1917" alt="Menu item upsert" src="https://github.com/user-attachments/assets/ffc14342-9623-4a62-8f8f-2984d66a25b4" />
+
+<img width="1917" alt="Menu item upsert rich text" src="https://github.com/user-attachments/assets/16a9668b-bd90-42b8-bded-55fb3e5bac11" />
+
+<br>
+
+**Reviews** — all customer reviews; Managers can edit or delete any entry.
+
+<img width="1915" alt="Reviews list" src="https://github.com/user-attachments/assets/c1920f01-3e66-4662-be02-cd70a6d02386" />
+
+<br>
+
+**Register employee** — Manager creates staff accounts and assigns roles.
+
+<img width="1917" alt="Register employee" src="https://github.com/user-attachments/assets/01bbffcb-7295-46ee-8b50-e2a1f19a0f9f" />
+
+</details>
+
+---
+
+<details>
+<summary><strong>🧑‍🍳 Operations</strong> <em>(Manager / Front Desk / Kitchen)</em></summary>
+<br>
+
+**Order list** — all orders with status filter pills (Submitted, In Process, Ready, Completed, Cancelled).
+
+<img width="1918" alt="Order list" src="https://github.com/user-attachments/assets/d8153b7f-3434-40a9-8adc-3c4b858f778a" />
+
+<br>
+
+**Order details** — full summary with customer info, pickup time, and itemised list. Authorised roles can complete, cancel, or refund.
+
+<img width="1916" alt="Order details ops" src="https://github.com/user-attachments/assets/8d38b958-89b8-45e1-be8c-b49d37b12636" />
+
+<br>
+
+**Manage orders** — progress orders through the workflow. Action buttons adapt to the current status and the user's role.
+
+<img width="1914" alt="Manage orders" src="https://github.com/user-attachments/assets/c0a51106-ea41-42cc-af99-48f388e53769" />
+
+<img width="1917" alt="Manage orders in process" src="https://github.com/user-attachments/assets/d6095ef4-16e4-4a0c-bf58-f9926598b900" />
+
+</details>
