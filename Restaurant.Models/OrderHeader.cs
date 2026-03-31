@@ -49,9 +49,9 @@ namespace Restaurant.Models
 
         public string? TransactionId { get; set; }
 
-        // Stripe Properties
-        //public string? SessionId { get; set; }
-        //public string? PaymentIntentId { get; set; }
+        public string? SessionId { get; set; }
+
+        public string? PaymentIntentId { get; set; }
 
 
         [Display(Name = "Pickup Name")]
