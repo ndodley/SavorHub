@@ -177,6 +177,47 @@ body {
   font-weight: 500;
 }
 
+/* ── Menu details page ─────────────────────────────────────── */
+.details-item-header {
+  background-color: var(--app-surface);
+}
+
+.details-review-header {
+  background-color: var(--bs-primary) !important;
+  border-bottom: 0;
+}
+
+.details-review-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.details-review-badge {
+  font-size: 0.9rem;
+}
+
+.details-section-label {
+  color: var(--app-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.details-action-btn {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.btn-success.details-action-btn,
+.btn-primary.details-action-btn {
+  color: #fff;
+}
+
 /* ── Focus ring ────────────────────────────────────────────── */
 .btn:focus,
 .btn:active:focus,

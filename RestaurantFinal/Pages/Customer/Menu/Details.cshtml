@@ -5,7 +5,7 @@
 
     <!-- ── Item card ── -->
     <div class="card app-card shadow-sm mb-4">
-        <div class="card-header">
+        <div class="card-header details-item-header">
             <div class="row align-items-center">
                 <div class="col-12 col-md-8 d-flex align-items-center gap-2">
                     <h1 class="mb-0 fw-bold">@Model.ShoppingCart.MenuItem.Name</h1>
@@ -37,10 +37,10 @@
                                     <span class="badge bg-warning text-dark p-2 me-2">@Model.ShoppingCart.MenuItem.Category.Name</span>
                                     <span class="badge app-food-type-badge p-2">@Model.ShoppingCart.MenuItem.FoodType.Name</span>
                                 </div>
-                                <h5 class="fw-semibold mb-2">Description</h5>
+                                <h5 class="details-section-label mb-2">Description</h5>
                                 <p class="mb-4">@Html.Raw(Model.ShoppingCart.MenuItem.Description)</p>
                                 <div style="max-width:200px;">
-                                    <label asp-for="ShoppingCart.Count" class="form-label fw-semibold">Quantity</label>
+                                    <label asp-for="ShoppingCart.Count" class="form-label details-section-label">Quantity</label>
                                     <input asp-for="ShoppingCart.Count" type="number" min="1" max="100" class="form-control" />
                                     <span asp-validation-for="ShoppingCart.Count" class="text-danger small"></span>
                                 </div>
@@ -56,12 +56,12 @@
                     <div class="card-footer">
                         <div class="row g-2">
                             <div class="col-12 col-md-6">
-                                <a asp-page="Index" class="btn btn-outline-secondary w-100 py-3 fw-semibold">
+                                <a asp-page="Index" class="btn btn-success w-100 py-3 fw-semibold details-action-btn">
                                     <i class="bi bi-arrow-left me-2"></i>Back to Menu
                                 </a>
                             </div>
                             <div class="col-12 col-md-6">
-                                <button type="submit" class="btn btn-warning w-100 py-3 fw-semibold text-dark">
+                                <button type="submit" class="btn btn-primary w-100 py-3 fw-semibold details-action-btn">
                                     <i class="bi bi-cart-plus me-2"></i>Add to Cart
                                 </button>
                             </div>
@@ -72,12 +72,12 @@
 
     <!-- ── Reviews ── -->
     <div class="card app-card shadow-sm">
-        <div class="card-header">
-            <h3 class="mb-0 fw-bold">
+        <div class="card-header details-review-header text-white">
+            <h3 class="mb-0 fw-bold text-white details-review-title">
                 <i class="bi bi-star-fill text-warning"></i> Customer Reviews
                 @if (Model.Reviews.Any())
                 {
-                    <span class="badge bg-warning text-dark ms-2">
+                    <span class="badge bg-warning text-dark ms-2 details-review-badge">
                         @Model.AverageRating.ToString("F1") / 5.0 (@Model.Reviews.Count reviews)
                     </span>
                 }
@@ -86,13 +86,13 @@
             <div class="card-body">
                 <!-- Add Review Form -->
                         <div class="border-bottom pb-4 mb-4">
-                            <h5 class="fw-semibold mb-3">Write a Review</h5>
+                            <h5 class="details-section-label mb-3">Write a Review</h5>
                             @if (User.Identity?.IsAuthenticated == true)
                             {
                                 <form method="post" asp-page-handler="AddReview">
                                     <input asp-for="NewReview.MenuItemId" type="hidden" value="@Model.ShoppingCart.MenuItemId" />
                                     <div class="mb-3">
-                                        <label class="form-label fw-semibold">Rating</label>
+                                        <label class="form-label details-section-label">Rating</label>
                                         <div class="btn-group" role="group">
                                             @for (int i = 1; i <= 5; i++)
                                             {
@@ -105,12 +105,12 @@
                                         <span asp-validation-for="NewReview.Rating" class="text-danger d-block mt-1"></span>
                                     </div>
                                     <div class="mb-3">
-                                        <label asp-for="NewReview.Content" class="form-label fw-semibold">Your Review</label>
+                                        <label asp-for="NewReview.Content" class="form-label details-section-label">Your Review</label>
                                         <textarea asp-for="NewReview.Content" class="form-control" rows="4"
                                                   placeholder="Share your experience with this item..."></textarea>
                                         <span asp-validation-for="NewReview.Content" class="text-danger"></span>
                                     </div>
-                                    <button type="submit" class="btn btn-warning text-dark fw-semibold">
+                                     <button type="submit" class="btn btn-primary fw-semibold details-action-btn">
                                         <i class="bi bi-send me-2"></i>Submit Review
                                     </button>
                                 </form>
@@ -125,7 +125,7 @@
 
                         @if (Model.Reviews.Any())
                         {
-                            <h5 class="fw-semibold mb-3">All Reviews</h5>
+                            <h5 class="details-section-label mb-3">All Reviews</h5>
                             @foreach (var review in Model.Reviews)
                             {
                                 <div class="card app-card mb-3">
@@ -159,7 +159,7 @@
                                                             <label class="form-label">Content</label>
                                                             <textarea class="form-control" rows="3" name="NewReview.Content">@review.Content</textarea>
                                                         </div>
-                                                        <button type="submit" class="btn btn-sm btn-warning text-dark">Update</button>
+                                                         <button type="submit" class="btn btn-sm btn-primary">Update</button>
                                                     </form>
                                                     <form class="mt-2" method="post" asp-page-handler="DeleteReview"
                                                           asp-route-id="@Model.ShoppingCart.MenuItemId"

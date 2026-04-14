@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🍽️ Savour Table
+# 🍽️ SavorHub
 
 A full-stack restaurant ordering and management platform built with **.NET 10** and ASP.NET Core Razor Pages.  
 Customers browse the menu, add items to a cart, and pay via Stripe.  
@@ -44,14 +44,16 @@ Supports persistent **Light / Dark mode**.
 
 ## 🏗️ Architecture
 
-Four-project N-tier solution:
+Four-project N-tier solution currently organized as:
 
 | Project | Role |
 |:---|:---|
-| `RestaurantFinal` | Razor Pages presentation layer, controllers |
-| `Restaurant.Data` | EF Core `DbContext`, Repository Pattern, Unit of Work |
-| `Restaurant.Models` | Domain entities (`MenuItem`, `OrderHeader`, `Review`, …) |
+| `RestaurantFinal` | Razor Pages presentation layer, controllers, app startup |
+| `Restaurant.Data` | EF Core `DbContext`, repositories, Unit of Work |
+| `Restaurant.Models` | Domain entities (`MenuItem`, `OrderHeader`, `Review`, ...) |
 | `Restaurant.Utility` | Shared role and status constants (`SD.cs`) |
+
+> Assemblies and app branding use the `SavorHub` name, while the current project structure in Solution Explorer still uses the original `Restaurant*` project names.
 
 **Patterns used:** Repository Pattern · Unit of Work · Dependency Injection · `ApplicationUser : IdentityUser`
 
@@ -61,7 +63,7 @@ Four-project N-tier solution:
 
 ```bash
 # 1. Clone and open the solution in Visual Studio
-# 2. Set RestaurantFinal as the startup project
+# 2. Set SavorHub as the startup project
 # 3. Update the connection string in appsettings.json
 # 4. Apply migrations (Package Manager Console)
 Update-Database
@@ -130,27 +132,27 @@ Update-Database
 
 **Home page** — hero banner, featured items carousel, Why Choose Us section.
 
-<img width="1916" alt="Home page" src="https://github.com/user-attachments/assets/27f1cc88-087c-45a9-befb-1c5bbab62811" />
+<img width="1913" height="1030" alt="SavorHub home page" src="https://github.com/user-attachments/assets/a25e26af-09fa-4a41-9d52-dce1968a63d1" />
 
-<img width="1911" alt="Home page scrolled" src="https://github.com/user-attachments/assets/553cdd78-a7f7-4f19-8a7b-40b750923378" />
+<img width="1917" height="1029" alt="SavorHub home page scrolled" src="https://github.com/user-attachments/assets/ca03ecfe-a0f2-449b-8d90-ee8adf6abeb6" />
 
 <br>
 
 **Menu page** — items grouped by category, per-category carousel, food type badge, star rating, and favourites toggle.
 
-<img width="1916" alt="Menu" src="https://github.com/user-attachments/assets/c73b0284-d10a-49a1-bf1b-0bf68913f8be" />
+<img width="1915" height="1033" alt="SavorHub menu page" src="https://github.com/user-attachments/assets/1ba9ee32-90bf-40a9-8cf1-ee707bd6d99e" />
 
-<img width="1915" alt="Menu carousel" src="https://github.com/user-attachments/assets/2d51acb4-be28-4f5b-883c-c3b2507bbb1a" />
+<img width="1917" height="1031" alt="SavorHub menu page category carousel" src="https://github.com/user-attachments/assets/9e4644c2-d066-4ee5-9088-e1a1fca5ecdc" />
 
-<img width="1916" alt="Menu dark mode" src="https://github.com/user-attachments/assets/c34c44d9-3aeb-479e-9049-08b1cc23d9fe" />
+<img width="1914" height="1027" alt="SavorHub menu page dark mode" src="https://github.com/user-attachments/assets/f1246d12-5e5c-46c8-b544-7a9f0394bd9d" />
 
-<img width="1916" alt="Menu dark mode scrolled" src="https://github.com/user-attachments/assets/48c92168-3dad-4c3e-93cf-3e5f3a966adc" />
+<img width="1916" height="1031" alt="SavorHub menu page dark mode scrolled" src="https://github.com/user-attachments/assets/02246085-2bf2-465b-9edf-d92e46de429b" />
 
 <br>
 
 **Item details** — image, description, category / food-type badges, price, quantity selector, and customer reviews.
 
-<img width="1916" alt="Item details" src="https://github.com/user-attachments/assets/6f5838a9-22a7-4c84-b704-54e092a000d2" />
+<img width="1913" height="1029" alt="SavorHub item details page" src="https://github.com/user-attachments/assets/3c2d8027-2c44-4e6e-8ef2-e491b30f969a" />
 
 </details>
 
@@ -160,9 +162,9 @@ Update-Database
 <summary><strong>🔐 Login &amp; Register</strong></summary>
 <br>
 
-<img width="1917" alt="Login" src="https://github.com/user-attachments/assets/0b5613ef-b164-4331-b812-11b08e41738a" />
+<img width="1919" height="1030" alt="SavorHub login page" src="https://github.com/user-attachments/assets/651a2bdb-9fb1-4a31-9f8d-faecb070f8db" />
 
-<img width="1917" alt="Register" src="https://github.com/user-attachments/assets/2dc084ab-01c4-402d-a20e-051a4f4688d2" />
+<img width="1917" height="1024" alt="SavorHub register page" src="https://github.com/user-attachments/assets/1b0df8b7-5652-4da2-9938-d27182d324cc" />
 
 </details>
 
@@ -174,33 +176,33 @@ Update-Database
 
 **Home (signed in)** — navbar shows cart icon, account menu, and role-based links.
 
-<img width="1919" alt="Home signed in" src="https://github.com/user-attachments/assets/9bed6817-3862-4191-9f92-eb3773a9a2f4" />
+<img width="1918" height="1030" alt="SavorHub signed-in home page" src="https://github.com/user-attachments/assets/cf44498c-1b43-454d-a141-2051ca824eb4" />
 
 <br>
 
 **Cart** — item list with quantity controls and running order total.
 
-<img width="1918" alt="Cart" src="https://github.com/user-attachments/assets/285e9093-2fce-4437-8a3d-a95a6fede635" />
+<img width="1917" height="1027" alt="SavorHub cart page" src="https://github.com/user-attachments/assets/b970ce2b-3d7f-47a3-8faa-6a48b44d2c40" />
 
 <br>
 
 **Order summary** — contact details, pickup time, optional comments, and itemised total before placing.
 
-<img width="1918" alt="Order summary" src="https://github.com/user-attachments/assets/58185fc0-651f-4d98-8cf2-bf341434a335" />
+<img width="1918" height="1029" alt="SavorHub order summary page" src="https://github.com/user-attachments/assets/57226984-130b-4031-94ad-18889f6117af" />
 
 <br>
 
 **Stripe checkout** — card payment form.
 
-<img width="1916" alt="Stripe checkout" src="https://github.com/user-attachments/assets/5c4b8ca8-1ab5-4be4-a898-f4da4b00a5f1" />
+<img width="1917" height="1029" alt="SavorHub Stripe checkout page" src="https://github.com/user-attachments/assets/db119ba6-b4be-4eed-8e06-10c74e639c4a" />
 
 <br>
 
 **Order confirmation** — assigned order ID, purchased items with clickable images, and links to order history.
 
-<img width="1915" alt="Order confirmation" src="https://github.com/user-attachments/assets/7ee7de1e-b19d-4dc8-b707-0f53a7ccbef2" />
+<img width="1918" height="1030" alt="SavorHub order confirmation page" src="https://github.com/user-attachments/assets/a0477861-ec80-44d6-8ba1-781726d7e114" />
 
-<img width="1915" alt="Order confirmation items" src="https://github.com/user-attachments/assets/fcb67e5f-e879-45ad-bc70-5adf8219436f" />
+<img width="1917" height="1031" alt="SavorHub order confirmation purchased items" src="https://github.com/user-attachments/assets/c8c2667e-3d41-4d24-bd70-39265b04e780" />
 
 </details>
 
@@ -212,27 +214,27 @@ Update-Database
 
 **My orders** — chronological order history with ID, date, total, and status.
 
-<img width="1916" alt="My orders" src="https://github.com/user-attachments/assets/0a18467c-27e0-4ca6-9cb6-c5c4399ddf88" />
+<img width="1920" height="1027" alt="SavorHub my orders page" src="https://github.com/user-attachments/assets/ca041a21-1dd5-423e-bc18-b3620af3c113" />
 
 <br>
 
 **Order details** — full summary with pickup time, comments, and itemised list. Thumbnails link to menu detail pages.
 
-<img width="1916" alt="Order details" src="https://github.com/user-attachments/assets/48823ec2-191d-4e68-9749-9c17c7c79afe" />
+<img width="1916" height="1028" alt="SavorHub customer order details page" src="https://github.com/user-attachments/assets/b82b35b0-d955-4caf-aba8-d299c74d6d99" />
 
 <br>
 
 **Favourites** — saved items in a category carousel. Heart button removes an item.
 
-<img width="1917" alt="Favourites" src="https://github.com/user-attachments/assets/fdae8fbe-fa4e-4585-89dc-f135fd14312b" />
+<img width="1914" height="1032" alt="SavorHub favourites page" src="https://github.com/user-attachments/assets/77de4d9c-2ead-40f3-a227-16976bb32bcd" />
 
-<img width="1916" alt="Favourites dark" src="https://github.com/user-attachments/assets/8f0f2441-6ee7-4f3b-9c61-28280e93ffa4" />
+<img width="959" height="517" alt="SavorHub favourites page dark mode" src="https://github.com/user-attachments/assets/bfead943-095a-4246-a28b-33da91e59da1" />
 
 <br>
 
 **My reviews** — all reviews written by the customer with edit and delete actions.
 
-<img width="1920" alt="My reviews" src="https://github.com/user-attachments/assets/5c0efb39-6957-4e1e-8ab2-50f4c03dfe79" />
+<img width="958" height="515" alt="SavorHub my reviews page" src="https://github.com/user-attachments/assets/ea37ea8d-4211-4e98-aa2a-35a4b7cc567f" />
 
 </details>
 
@@ -244,41 +246,39 @@ Update-Database
 
 **Categories** — DataTables list and create/edit form with display-order control.
 
-<img width="1916" alt="Categories list" src="https://github.com/user-attachments/assets/27ce7efe-efc3-4072-bd3f-8b488a9921d7" />
+<img width="959" height="514" alt="SavorHub categories list page" src="https://github.com/user-attachments/assets/7b0a9999-fa3d-4271-907e-20939d3eff6b" />
 
-<img width="1916" alt="Categories edit" src="https://github.com/user-attachments/assets/29ecf19b-043a-4269-a754-f2ce4fca31ef" />
+<img width="959" height="515" alt="SavorHub category edit page" src="https://github.com/user-attachments/assets/61d5072e-6e24-4540-bffe-14fc26ff2183" />
 
 <br>
 
 **Food types** — manage dietary tags (Vegetarian, Vegan, Gluten-Free, etc.).
 
-<img width="1916" alt="Food types list" src="https://github.com/user-attachments/assets/c57539cf-7e79-41e5-b990-061837e1c3f5" />
+<img width="959" height="516" alt="SavorHub food types list page" src="https://github.com/user-attachments/assets/bbbe015b-b3ec-4f21-aa65-bf63c38d6735" />
 
-<img width="1916" alt="Food types edit" src="https://github.com/user-attachments/assets/1ad3927f-10ab-4b57-96ef-95d0c2e42d67" />
+<img width="958" height="515" alt="SavorHub food type edit page" src="https://github.com/user-attachments/assets/67cb80d3-c34a-416b-ba1e-e4e6338424b1" />
 
 <br>
 
 **Menu items** — searchable DataTables list with CSV import/export and a combined create/edit form (TinyMCE, image upload).
 
-<img width="1916" alt="Menu items list" src="https://github.com/user-attachments/assets/a6565111-281e-4504-b63b-17cafc5c8fc6" />
+<img width="959" height="515" alt="SavorHub menu items list page" src="https://github.com/user-attachments/assets/30ae4702-b4fc-4d23-a1c6-ff3597352a4b" />
 
-<img width="1916" alt="Menu items CSV" src="https://github.com/user-attachments/assets/ac01fb1e-c2c1-416e-9a33-b5895eda57ec" />
+<img width="959" height="515" alt="SavorHub menu items CSV tools" src="https://github.com/user-attachments/assets/0a8d523c-f2ab-4477-8aeb-9fd6490fa5f0" />
 
-<img width="1917" alt="Menu item upsert" src="https://github.com/user-attachments/assets/ffc14342-9623-4a62-8f8f-2984d66a25b4" />
-
-<img width="1917" alt="Menu item upsert rich text" src="https://github.com/user-attachments/assets/16a9668b-bd90-42b8-bded-55fb3e5bac11" />
+<img width="959" height="515" alt="SavorHub menu item upsert page" src="https://github.com/user-attachments/assets/ae7e7737-3f2d-4ec5-8813-f648d081a7c3" />
 
 <br>
 
 **Reviews** — all customer reviews; Managers can edit or delete any entry.
 
-<img width="1915" alt="Reviews list" src="https://github.com/user-attachments/assets/c1920f01-3e66-4662-be02-cd70a6d02386" />
+<img width="959" height="515" alt="SavorHub admin reviews page" src="https://github.com/user-attachments/assets/7d660a43-b9f8-4f70-abe8-d0284a2bef10" />
 
 <br>
 
 **Register employee** — Manager creates staff accounts and assigns roles.
 
-<img width="1917" alt="Register employee" src="https://github.com/user-attachments/assets/01bbffcb-7295-46ee-8b50-e2a1f19a0f9f" />
+<img width="959" height="515" alt="SavorHub register employee page" src="https://github.com/user-attachments/assets/a53af9bf-c766-4a08-911b-0cad9badaaa8" />
 
 </details>
 
@@ -290,20 +290,20 @@ Update-Database
 
 **Order list** — all orders with status filter pills (Submitted, In Process, Ready, Completed, Cancelled).
 
-<img width="1918" alt="Order list" src="https://github.com/user-attachments/assets/d8153b7f-3434-40a9-8adc-3c4b858f778a" />
+<img width="958" height="515" alt="SavorHub operations order list page" src="https://github.com/user-attachments/assets/3db2805c-7ea3-47ca-bb57-174192117336" />
 
 <br>
 
 **Order details** — full summary with customer info, pickup time, and itemised list. Authorised roles can complete, cancel, or refund.
 
-<img width="1916" alt="Order details ops" src="https://github.com/user-attachments/assets/8d38b958-89b8-45e1-be8c-b49d37b12636" />
+<img width="959" height="515" alt="SavorHub operations order details page" src="https://github.com/user-attachments/assets/ba951fbe-73b5-48ce-b023-b392a4ba5603" />
 
 <br>
 
 **Manage orders** — progress orders through the workflow. Action buttons adapt to the current status and the user's role.
 
-<img width="1914" alt="Manage orders" src="https://github.com/user-attachments/assets/c0a51106-ea41-42cc-af99-48f388e53769" />
+<img width="959" height="515" alt="SavorHub manage orders page" src="https://github.com/user-attachments/assets/b9250488-3975-413a-a943-10c02253b0dd" />
 
-<img width="1917" alt="Manage orders in process" src="https://github.com/user-attachments/assets/d6095ef4-16e4-4a0c-bf58-f9926598b900" />
+<img width="958" height="515" alt="SavorHub manage orders in-process view" src="https://github.com/user-attachments/assets/549c4e04-1a11-4783-9033-7115c1dfc75f" />
 
 </details>

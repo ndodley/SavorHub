@@ -82,6 +82,7 @@ app.Use(async (context, next) =>
             "https://cdnjs.cloudflare.com " +
             "https://cdn.jsdelivr.net " +
             "https://cdn.datatables.net " +
+            "https://cdn.tiny.cloud " +
             "https://fonts.googleapis.com; " +
         "img-src 'self' data: https:; " +
         // fonts.gstatic.com serves the actual Google Font binary files
