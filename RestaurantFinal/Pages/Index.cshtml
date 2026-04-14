@@ -15,7 +15,7 @@
      style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 55%, #0f3460 100%);">
     <div class="py-2">
         <p class="text-uppercase text-warning fw-bold mb-2" style="letter-spacing:.2em; font-size:1.1rem;">Welcome to</p>
-        <h1 class="display-3 fw-bold mb-3 text-white">Savour Table</h1>
+        <h1 class="display-3 fw-bold mb-3 text-white">SavorHub</h1>
         <p class="lead mb-4 mx-auto" style="max-width:560px; color: rgba(255,255,255,0.85);">
             Handcrafted dishes made with fresh, locally sourced ingredients. Every visit is a new experience worth savouring.
         </p>
@@ -82,19 +82,15 @@
                                                         }
                                                         else
                                                         {
-                                                            <i class="bi bi-star text-muted small"></i>
+                                                            <i class="bi bi-star text-warning small"></i>
                                                         }
                                                     }
-                                                    @if (rating.ReviewCount > 0)
-                                                    {
-                                                        <span class="text-muted small ms-1">(@rating.ReviewCount)</span>
-                                                    }
+                                                    <span class="text-muted small ms-1">(@rating.ReviewCount)</span>
                                                 </div>
-                                                <div class="mt-auto d-flex justify-content-between align-items-center">
-                                                    <span class="app-price fw-bold fs-5">$@item.Price</span>
-                                                    <span class="btn btn-sm btn-warning text-dark fw-semibold">
-                                                        View Details <i class="bi bi-arrow-right ms-1"></i>
-                                                    </span>
+                                                <p class="text-muted small flex-grow-1 mb-3 menu-card-desc">@item.Description</p>
+                                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                    <span class="fw-bold app-price">@item.Price.ToString("c")</span>
+                                                    <span class="btn btn-warning btn-sm px-3">View</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -105,17 +101,14 @@
                     </div>
                 }
             </div>
-            @if (chunks.Count > 1)
-            {
-                <div class="d-flex justify-content-center gap-2 mt-3">
-                    <button class="btn btn-secondary btn-sm px-3" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
-                        <i class="bi bi-chevron-left"></i>
-                    </button>
-                    <button class="btn btn-secondary btn-sm px-3" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
-                        <i class="bi bi-chevron-right"></i>
-                    </button>
-                </div>
-            }
+            <button class="carousel-control-prev" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     }
     else

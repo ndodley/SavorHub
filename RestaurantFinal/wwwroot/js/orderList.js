@@ -1,4 +1,16 @@
 ﻿var dataTable;
+var currencyFormatter = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+});
+var pickupTimeFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+});
+
 $(document).ready(function () {
     var url = window.location.search;
     if (url.includes("cancelled")) {
@@ -28,8 +40,35 @@ function loadList(param) {
         { "data": "id", "width": "15%" },
         { "data": "pickupName", "width": "15%" },
         { "data": "applicationUser.email", "width": "15%" },
-        { "data": "orderTotal", "width": "15%" },
-        { "data": "pickUpTime", "width": "25%" },
+        {
+            "data": "orderTotal",
+            "width": "15%",
+            "render": function (data, type) {
+                var numericValue = Number(data);
+
+                if (type !== 'display' && type !== 'filter') {
+                    return numericValue;
+                }
+
+                return Number.isFinite(numericValue)
+                    ? currencyFormatter.format(numericValue)
+                    : '0.00';
+            }
+        },
+        {
+            "data": "pickUpTime",
+            "width": "25%",
+            "render": function (data, type) {
+                if (type !== 'display' && type !== 'filter') {
+                    return data;
+                }
+
+                var dateValue = new Date(data);
+                return Number.isNaN(dateValue.getTime())
+                    ? data
+                    : pickupTimeFormatter.format(dateValue);
+            }
+        },
         {
             "data": "id",
             "render": function (data) {

@@ -4,6 +4,9 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Name>SavorHub.Models</Name>
+    <AssemblyName>SavorHub.Models</AssemblyName>
+    <RootNamespace>SavorHub.Models</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
