@@ -32,6 +32,30 @@ namespace Restaurant.Models.Tests
             Assert.Contains(validationResults, result => result.MemberNames.Contains("Name"));
         }
 
+        [Fact]
+        public void FoodType_IsValid_WhenNameIsProvided()
+        {
+            // Arrange
+            var model = new FoodType
+            {
+                Name = "Pizza"
+            };
+
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(model);
+
+            // Act
+            var isValid = Validator.TryValidateObject(
+                model,
+                validationContext,
+                validationResults,
+                validateAllProperties: true);
+
+            // Assert
+            Assert.True(isValid);
+            Assert.Empty(validationResults);
+        }
+
     }
 
 }
