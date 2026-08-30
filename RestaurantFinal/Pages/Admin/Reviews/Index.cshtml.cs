@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
-using Restaurant.Utility;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
+using SavorHub.Utilities;
 
-namespace RestaurantFinal.Pages.Admin.Reviews
+namespace SavorHub.Web.Pages.Admin.Reviews
 {
     [Authorize(Roles = SD.ManagerRole)]
     public class IndexModel : PageModel

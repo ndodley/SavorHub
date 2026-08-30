@@ -18,10 +18,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Restaurant.Models;
-using Restaurant.Utility;
+using SavorHub.Models;
+using SavorHub.Utilities;
 
-namespace RestaurantFinal.Areas.Identity.Pages.Account
+namespace SavorHub.Web.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {

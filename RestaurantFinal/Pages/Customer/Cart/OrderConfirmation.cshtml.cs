@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
-using Restaurant.Utility;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
+using SavorHub.Utilities;
 using Stripe.Checkout;
 
-namespace RestaurantFinal.Pages.Customer.Cart
+namespace SavorHub.Web.Pages.Customer.Cart
 {
     public class OrderConfirmationModel : PageModel
     {

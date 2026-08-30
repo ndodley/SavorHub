@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
+using SavorHub.Data.Repository;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
 using System.Security.Claims;
 
-namespace RestaurantFinal.Pages.Customer.Reviews
+namespace SavorHub.Web.Pages.Customer.Reviews
 {
     [Authorize]
     public class MyReviewsModel : PageModel

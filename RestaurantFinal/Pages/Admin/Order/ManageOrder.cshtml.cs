@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models.ViewModel;
-using Restaurant.Models;
-using Restaurant.Utility;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models.ViewModel;
+using SavorHub.Models;
+using SavorHub.Utilities;
 
-namespace RestaurantFinal.Pages.Admin.Order
+namespace SavorHub.Web.Pages.Admin.Order
 {
     [Authorize(Roles = $"{SD.ManagerRole},{SD.KitchenRole}")]
     public class ManageOrderModel : PageModel

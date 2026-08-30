@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Restaurant.Data.Data;
-using Restaurant.Data.Repository.IRepository;
+using SavorHub.Data.Data;
+using SavorHub.Data.Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Data.Repository
+namespace SavorHub.Data.Repository
 {
     public class Repository<T> : IRepository<T> where T : class // T stands for the model class for which we are creating this repository out of.
     {

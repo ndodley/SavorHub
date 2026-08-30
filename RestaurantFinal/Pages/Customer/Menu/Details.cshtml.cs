@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
 using System.Security.Claims;
 
-namespace RestaurantFinal.Pages.Customer.Menu
+namespace SavorHub.Web.Pages.Customer.Menu
 {
     public class DetailsModel : PageModel
     {

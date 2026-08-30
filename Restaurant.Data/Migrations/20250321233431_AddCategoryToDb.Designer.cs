@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Restaurant.Data.Data;
+using SavorHub.Data.Data;
 
 #nullable disable
 
-namespace Restaurant.Data.Migrations
+namespace SavorHub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250321233431_AddCategoryToDb")]
@@ -24,7 +24,7 @@ namespace Restaurant.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Restaurant.Models.Category", b =>
+            modelBuilder.Entity("SavorHub.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

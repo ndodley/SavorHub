@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Restaurant.Models;
+using SavorHub.Models;
 
-namespace RestaurantFinal.Areas.Identity.Pages.Account
+namespace SavorHub.Web.Areas.Identity.Pages.Account
 {
     public class LoginWith2faModel : PageModel
     {

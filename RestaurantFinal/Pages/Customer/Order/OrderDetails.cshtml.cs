@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models.ViewModel;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models.ViewModel;
 
-namespace RestaurantFinal.Pages.Customer.Order
+namespace SavorHub.Web.Pages.Customer.Order
 {
     public class OrderDetailsModel : PageModel
     {

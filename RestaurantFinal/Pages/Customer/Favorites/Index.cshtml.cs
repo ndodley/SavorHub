@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
 using System.Security.Claims;
 
-namespace RestaurantFinal.Pages.Customer.Favorites
+namespace SavorHub.Web.Pages.Customer.Favorites
 {
     [Authorize]
     public class IndexModel : PageModel

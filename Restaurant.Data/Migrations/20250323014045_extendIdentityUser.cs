@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Restaurant.Data.Migrations
+namespace SavorHub.Data.Migrations
 {
     /// <inheritdoc />
     public partial class extendIdentityUser : Migration

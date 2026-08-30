@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
 
-namespace RestaurantFinal.Pages;
+namespace SavorHub.Web.Pages;
 
 public class IndexModel : PageModel
 {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
 using System.Security.Claims;
 
-namespace RestaurantFinal.Controllers
+namespace SavorHub.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

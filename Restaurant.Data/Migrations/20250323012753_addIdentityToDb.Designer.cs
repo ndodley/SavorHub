@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Restaurant.Data.Data;
+using SavorHub.Data.Data;
 
 #nullable disable
 
-namespace Restaurant.Data.Migrations
+namespace SavorHub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250323012753_addIdentityToDb")]
@@ -227,7 +227,7 @@ namespace Restaurant.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Restaurant.Models.Category", b =>
+            modelBuilder.Entity("SavorHub.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -248,7 +248,7 @@ namespace Restaurant.Data.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("Restaurant.Models.FoodType", b =>
+            modelBuilder.Entity("SavorHub.Models.FoodType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -265,7 +265,7 @@ namespace Restaurant.Data.Migrations
                     b.ToTable("FoodType");
                 });
 
-            modelBuilder.Entity("Restaurant.Models.MenuItem", b =>
+            modelBuilder.Entity("SavorHub.Models.MenuItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -354,15 +354,15 @@ namespace Restaurant.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Restaurant.Models.MenuItem", b =>
+            modelBuilder.Entity("SavorHub.Models.MenuItem", b =>
                 {
-                    b.HasOne("Restaurant.Models.Category", "Category")
+                    b.HasOne("SavorHub.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Restaurant.Models.FoodType", "FoodType")
+                    b.HasOne("SavorHub.Models.FoodType", "FoodType")
                         .WithMany()
                         .HasForeignKey("FoodTypeId")
                         .OnDelete(DeleteBehavior.Cascade)

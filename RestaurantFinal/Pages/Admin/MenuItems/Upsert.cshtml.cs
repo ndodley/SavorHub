@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
 
-namespace RestaurantFinal.Pages.Admin.MenuItems
+namespace SavorHub.Web.Pages.Admin.MenuItems
 {
     [BindProperties]
     public class UpsertModel : PageModel
