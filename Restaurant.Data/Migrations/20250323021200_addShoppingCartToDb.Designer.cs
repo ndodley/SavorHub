@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Restaurant.Data.Data;
+using SavorHub.Data.Data;
 
 #nullable disable
 
-namespace Restaurant.Data.Migrations
+namespace SavorHub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250323021200_addShoppingCartToDb")]
@@ -232,7 +232,7 @@ namespace Restaurant.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Restaurant.Models.Category", b =>
+            modelBuilder.Entity("SavorHub.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -253,7 +253,7 @@ namespace Restaurant.Data.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("Restaurant.Models.FoodType", b =>
+            modelBuilder.Entity("SavorHub.Models.FoodType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -270,7 +270,7 @@ namespace Restaurant.Data.Migrations
                     b.ToTable("FoodType");
                 });
 
-            modelBuilder.Entity("Restaurant.Models.MenuItem", b =>
+            modelBuilder.Entity("SavorHub.Models.MenuItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -308,7 +308,7 @@ namespace Restaurant.Data.Migrations
                     b.ToTable("MenuItem");
                 });
 
-            modelBuilder.Entity("Restaurant.Models.ShoppingCart", b =>
+            modelBuilder.Entity("SavorHub.Models.ShoppingCart", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -335,7 +335,7 @@ namespace Restaurant.Data.Migrations
                     b.ToTable("ShoppingCart");
                 });
 
-            modelBuilder.Entity("Restaurant.Models.ApplicationUser", b =>
+            modelBuilder.Entity("SavorHub.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -401,15 +401,15 @@ namespace Restaurant.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Restaurant.Models.MenuItem", b =>
+            modelBuilder.Entity("SavorHub.Models.MenuItem", b =>
                 {
-                    b.HasOne("Restaurant.Models.Category", "Category")
+                    b.HasOne("SavorHub.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Restaurant.Models.FoodType", "FoodType")
+                    b.HasOne("SavorHub.Models.FoodType", "FoodType")
                         .WithMany()
                         .HasForeignKey("FoodTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -420,15 +420,15 @@ namespace Restaurant.Data.Migrations
                     b.Navigation("FoodType");
                 });
 
-            modelBuilder.Entity("Restaurant.Models.ShoppingCart", b =>
+            modelBuilder.Entity("SavorHub.Models.ShoppingCart", b =>
                 {
-                    b.HasOne("Restaurant.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("SavorHub.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Restaurant.Models.MenuItem", "MenuItem")
+                    b.HasOne("SavorHub.Models.MenuItem", "MenuItem")
                         .WithMany()
                         .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -14,9 +14,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Restaurant.Models;
+using SavorHub.Models;
 
-namespace RestaurantFinal.Areas.Identity.Pages.Account
+namespace SavorHub.Web.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {

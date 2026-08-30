@@ -1,6 +1,6 @@
-using Restaurant.Models;
+using SavorHub.Models;
 
-namespace Restaurant.Data.Repository.IRepository
+namespace SavorHub.Data.Repository.IRepository
 {
     public interface IFavoriteRepository : IRepository<Favorite>
     {

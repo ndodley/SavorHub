@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Utility
+namespace SavorHub.Utilities
 {
     public static class SD
     {

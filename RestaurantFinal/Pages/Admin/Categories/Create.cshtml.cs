@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
 
-namespace RestaurantFinal.Pages.Admin.Categories
+namespace SavorHub.Web.Pages.Admin.Categories
 {
     [BindProperties]
     public class CreateModel : PageModel

@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Restaurant.Data.Data;
-using Restaurant.Data.Repository;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
-using Restaurant.Utility;
+using SavorHub.Data.Data;
+using SavorHub.Data.Repository;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
+using SavorHub.Utilities;
 using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);

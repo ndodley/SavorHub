@@ -1,13 +1,13 @@
-﻿using Restaurant.Data.Data;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
+﻿using SavorHub.Data.Data;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Data.Repository
+namespace SavorHub.Data.Repository
 {
     public class ReviewRepository : Repository<Review>, IReviewRepository
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Restaurant.Utility
+namespace SavorHub.Utilities
 {
     public class StripeSettings
     {

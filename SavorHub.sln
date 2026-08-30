@@ -2,13 +2,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.4.11626.88
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantFinal", "RestaurantFinal\RestaurantFinal.csproj", "{965424EA-C83D-4667-97C8-832ABA089FDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Web", "RestaurantFinal\SavorHub.Web.csproj", "{965424EA-C83D-4667-97C8-832ABA089FDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Models", "Restaurant.Models\Restaurant.Models.csproj", "{CD6B5E02-697C-4588-B889-285CD62758C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Models", "Restaurant.Models\SavorHub.Models.csproj", "{CD6B5E02-697C-4588-B889-285CD62758C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Data", "Restaurant.Data\Restaurant.Data.csproj", "{9F2CCAD4-D931-4E41-8087-D6A2058196E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Data", "Restaurant.Data\SavorHub.Data.csproj", "{9F2CCAD4-D931-4E41-8087-D6A2058196E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Utility", "Restaurant.Utility\Restaurant.Utility.csproj", "{3265A3AB-39F3-4BC9-A66F-1D45FD0C8BDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Utilities", "Restaurant.Utility\SavorHub.Utilities.csproj", "{3265A3AB-39F3-4BC9-A66F-1D45FD0C8BDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

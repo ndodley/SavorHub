@@ -5,12 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Name>SavorHub.Utility</Name>
-    <AssemblyName>SavorHub.Utility</AssemblyName>
-    <RootNamespace>SavorHub.Utility</RootNamespace>
+    <AssemblyName>SavorHub.Utilities</AssemblyName>
+    <RootNamespace>SavorHub.Utilities</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.11" />
   </ItemGroup>
 
 </Project>

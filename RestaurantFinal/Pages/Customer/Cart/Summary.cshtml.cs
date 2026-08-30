@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
-using Restaurant.Utility;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
+using SavorHub.Utilities;
 using Stripe.Checkout;
 using System.Security.Claims;
 
-namespace RestaurantFinal.Pages.Customer.Cart
+namespace SavorHub.Web.Pages.Customer.Cart
 {
     [Authorize]
     [BindProperties]

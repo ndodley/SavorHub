@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Models
+namespace SavorHub.Models
 {
     public class ApplicationUser : IdentityUser
     {

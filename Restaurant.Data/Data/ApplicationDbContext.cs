@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Restaurant.Models;
+using SavorHub.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Data.Data
+namespace SavorHub.Data.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

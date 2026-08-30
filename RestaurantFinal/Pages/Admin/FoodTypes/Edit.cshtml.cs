@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Restaurant.Data.Repository.IRepository;
-using Restaurant.Models;
+using SavorHub.Data.Repository.IRepository;
+using SavorHub.Models;
 
-namespace RestaurantFinal.Pages.Admin.FoodTypes
+namespace SavorHub.Web.Pages.Admin.FoodTypes
 {
     [BindProperties]
     public class EditModel : PageModel
