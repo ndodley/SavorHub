@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Restaurant.Models\SavorHub.Models.csproj" />
+    <ProjectReference Include="..\SavorHub.Models\SavorHub.Models.csproj" />
   </ItemGroup>
 
 </Project>

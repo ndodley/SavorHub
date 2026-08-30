@@ -32,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Restaurant.Data\SavorHub.Data.csproj" />
-    <ProjectReference Include="..\Restaurant.Utility\SavorHub.Utilities.csproj" />
+    <ProjectReference Include="..\SavorHub.Data\SavorHub.Data.csproj" />
+    <ProjectReference Include="..\SavorHub.Utilities\SavorHub.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
