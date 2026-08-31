@@ -44,16 +44,18 @@ Supports persistent **Light / Dark mode**.
 
 ## 🏗️ Architecture
 
-Four-project N-tier solution currently organized as:
+Eight-project solution organized as:
 
 | Project | Role |
 |:---|:---|
-| `RestaurantFinal` | Razor Pages presentation layer, controllers, app startup |
-| `Restaurant.Data` | EF Core `DbContext`, repositories, Unit of Work |
-| `Restaurant.Models` | Domain entities (`MenuItem`, `OrderHeader`, `Review`, ...) |
-| `Restaurant.Utility` | Shared role and status constants (`SD.cs`) |
-
-> Assemblies and app branding use the `SavorHub` name, while the current project structure in Solution Explorer still uses the original `Restaurant*` project names.
+| `SavorHub.Web` | Razor Pages presentation layer, controllers, app startup |
+| `SavorHub.Data` | EF Core `DbContext`, repositories, Unit of Work |
+| `SavorHub.Models` | Domain entities (`MenuItem`, `OrderHeader`, `Review`, ...) |
+| `SavorHub.Utilities` | Shared role and status constants (`SD.cs`) |
+| `SavorHub.Web.Tests` | xUnit tests for controllers (Moq) |
+| `SavorHub.Data.Tests` | xUnit tests for repositories (EF Core InMemory) |
+| `SavorHub.Models.Tests` | xUnit tests for domain entity validation |
+| `SavorHub.Utilities.Tests` | xUnit tests for shared constants |
 
 **Patterns used:** Repository Pattern · Unit of Work · Dependency Injection · `ApplicationUser : IdentityUser`
 
