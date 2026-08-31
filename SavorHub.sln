@@ -1,4 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.4.11626.88
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -9,6 +10,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Data", "SavorHub.Data\SavorHub.Data.csproj", "{9F2CCAD4-D931-4E41-8087-D6A2058196E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Utilities", "SavorHub.Utilities\SavorHub.Utilities.csproj", "{3265A3AB-39F3-4BC9-A66F-1D45FD0C8BDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Data.Tests", "SavorHub.Data.Tests\SavorHub.Data.Tests.csproj", "{C0E6F70B-B59E-4992-A6C2-EBAFE633E008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Models.Tests", "SavorHub.Models.Tests\SavorHub.Models.Tests.csproj", "{8632FF93-FD59-4126-87CF-6D78548A9BD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Utilities.Tests", "SavorHub.Utilities.Tests\SavorHub.Utilities.Tests.csproj", "{5681E83D-550C-452B-BA32-08893A459C59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorHub.Web.Tests", "SavorHub.Web.Tests\SavorHub.Web.Tests.csproj", "{3B71C30F-BC09-4F4C-8FA3-84BBD2C8028C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +41,22 @@ Global
 		{3265A3AB-39F3-4BC9-A66F-1D45FD0C8BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3265A3AB-39F3-4BC9-A66F-1D45FD0C8BDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3265A3AB-39F3-4BC9-A66F-1D45FD0C8BDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0E6F70B-B59E-4992-A6C2-EBAFE633E008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0E6F70B-B59E-4992-A6C2-EBAFE633E008}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0E6F70B-B59E-4992-A6C2-EBAFE633E008}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0E6F70B-B59E-4992-A6C2-EBAFE633E008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8632FF93-FD59-4126-87CF-6D78548A9BD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8632FF93-FD59-4126-87CF-6D78548A9BD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8632FF93-FD59-4126-87CF-6D78548A9BD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8632FF93-FD59-4126-87CF-6D78548A9BD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5681E83D-550C-452B-BA32-08893A459C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5681E83D-550C-452B-BA32-08893A459C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5681E83D-550C-452B-BA32-08893A459C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5681E83D-550C-452B-BA32-08893A459C59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B71C30F-BC09-4F4C-8FA3-84BBD2C8028C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B71C30F-BC09-4F4C-8FA3-84BBD2C8028C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B71C30F-BC09-4F4C-8FA3-84BBD2C8028C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B71C30F-BC09-4F4C-8FA3-84BBD2C8028C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
