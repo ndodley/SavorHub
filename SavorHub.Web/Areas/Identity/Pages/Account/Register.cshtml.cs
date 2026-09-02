@@ -189,7 +189,7 @@ namespace SavorHub.Web.Areas.Identity.Pages.Account
                         if (User.IsInRole(SD.ManagerRole)) 
                         {
                             TempData["success"] = "Employee registered successfully";
-                            return RedirectToPage("/Customer/Home/Index");
+                            return RedirectToPage("/Index");
                         }
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);

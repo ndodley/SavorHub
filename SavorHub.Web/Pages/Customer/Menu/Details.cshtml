@@ -4,12 +4,12 @@
 <div class="container py-4">
 
     <!-- ── Item card ── -->
-    <div class="card app-card shadow-sm mb-4">
+    <div class="card app-card details-card shadow-sm mb-4" data-ajax-region="item-@Model.ShoppingCart.MenuItemId">
         <div class="card-header details-item-header">
             <div class="row align-items-center">
                 <div class="col-12 col-md-8 d-flex align-items-center gap-2">
                     <h1 class="mb-0 fw-bold">@Model.ShoppingCart.MenuItem.Name</h1>
-                    <form method="post" asp-page-handler="ToggleFavorite" asp-route-id="@Model.ShoppingCart.MenuItemId">
+                    <form method="post" asp-page-handler="ToggleFavorite" asp-route-id="@Model.ShoppingCart.MenuItemId" data-ajax-form>
                         <button type="submit" class="btn btn-link p-0 ms-1" title="Toggle Favourite" aria-label="Toggle Favourite">
                             @if (Model.IsFavorite)
                             {
@@ -27,53 +27,88 @@
                 </div>
             </div>
         </div>
-                <form method="post">
-                    <input asp-for="ShoppingCart.MenuItemId" type="hidden" />
-                    <input asp-for="ShoppingCart.ApplicationUserId" type="hidden" />
-                    <div class="card-body">
-                        <div class="row g-4">
-                            <div class="col-12 col-lg-8">
-                                <div class="mb-3">
-                                    <span class="badge bg-warning text-dark p-2 me-2">@Model.ShoppingCart.MenuItem.Category.Name</span>
-                                    <span class="badge app-food-type-badge p-2">@Model.ShoppingCart.MenuItem.FoodType.Name</span>
-                                </div>
-                                <h5 class="details-section-label mb-2">Description</h5>
-                                <p class="mb-4">@Html.Raw(Model.ShoppingCart.MenuItem.Description)</p>
-                                <div style="max-width:200px;">
-                                    <label asp-for="ShoppingCart.Count" class="form-label details-section-label">Quantity</label>
-                                    <input asp-for="ShoppingCart.Count" type="number" min="1" max="100" class="form-control" />
-                                    <span asp-validation-for="ShoppingCart.Count" class="text-danger small"></span>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-4 text-center">
-                                <img src="@Model.ShoppingCart.MenuItem.Image"
-                                     class="img-fluid rounded shadow-sm"
-                                     alt="@Model.ShoppingCart.MenuItem.Name"
-                                     style="max-height:380px; object-fit:cover; width:100%;" />
-                            </div>
-                        </div>
+        @if (Model.CartEntry == null)
+        {
+            <!-- Empty form: the quantity input and the Add to Cart button live outside it
+                 (down in the card body / footer) and reference it via the HTML5 form=
+                 attribute, since they can't be nested inside this form and the footer's
+                 form at the same time. -->
+            <form method="post" id="addToCartForm" data-ajax-form>
+                <input asp-for="ShoppingCart.MenuItemId" type="hidden" />
+                <input asp-for="ShoppingCart.ApplicationUserId" type="hidden" />
+            </form>
+        }
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-12 col-lg-8">
+                    <div class="mb-3">
+                        <span class="badge bg-warning text-dark p-2 me-2">@Model.ShoppingCart.MenuItem.Category.Name</span>
+                        <span class="badge app-food-type-badge p-2">@Model.ShoppingCart.MenuItem.FoodType.Name</span>
                     </div>
-                    <div class="card-footer">
-                        <div class="row g-2">
-                            <div class="col-12 col-md-6">
-                                <a asp-page="Index" class="btn btn-success w-100 py-3 fw-semibold details-action-btn">
-                                    <i class="bi bi-arrow-left me-2"></i>Back to Menu
-                                </a>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <button type="submit" class="btn btn-primary w-100 py-3 fw-semibold details-action-btn">
-                                    <i class="bi bi-cart-plus me-2"></i>Add to Cart
-                                </button>
-                            </div>
+                    <h5 class="details-section-label mb-2">Description</h5>
+                    <p class="mb-4">@Html.Raw(Model.ShoppingCart.MenuItem.Description)</p>
+                    @if (Model.CartEntry == null)
+                    {
+                        <div style="max-width:200px;">
+                            <label asp-for="ShoppingCart.Count" class="form-label details-section-label">Quantity</label>
+                            <input asp-for="ShoppingCart.Count" type="number" min="1" max="100" class="form-control" form="addToCartForm" />
+                            <span asp-validation-for="ShoppingCart.Count" class="text-danger small"></span>
                         </div>
+                    }
+                </div>
+                <div class="col-12 col-lg-4 text-center">
+                    <div class="details-hero-img-wrap">
+                        <img src="@Model.ShoppingCart.MenuItem.Image"
+                             class="details-hero-img"
+                             alt="@Model.ShoppingCart.MenuItem.Name" />
                     </div>
-                </form>
+                </div>
             </div>
+        </div>
+        <div class="card-footer">
+            <div class="row g-2">
+                <div class="col-12 col-md-6">
+                    <a asp-page="Index" class="btn btn-success w-100 py-3 fw-semibold details-action-btn">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Menu
+                    </a>
+                </div>
+                <div class="col-12 col-md-6">
+                    @if (Model.CartEntry != null)
+                    {
+                        <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+                            <form method="post" asp-page-handler="DecrementCart" asp-route-id="@Model.ShoppingCart.MenuItemId" data-ajax-form>
+                                <button type="submit" class="btn cart-qty-btn" aria-label="Decrease quantity">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                            </form>
+                            <span class="fw-semibold cart-qty-value">@Model.CartEntry.Count</span>
+                            <form method="post" asp-page-handler="IncrementCart" asp-route-id="@Model.ShoppingCart.MenuItemId" data-ajax-form>
+                                <button type="submit" class="btn cart-qty-btn" aria-label="Increase quantity">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <form method="post" asp-page-handler="RemoveCart" asp-route-id="@Model.ShoppingCart.MenuItemId" data-ajax-form>
+                            <button type="submit" class="btn btn-outline-danger w-100 py-3 fw-semibold details-action-btn">
+                                <i class="bi bi-cart-x me-2"></i>Remove from Cart
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button type="submit" form="addToCartForm" class="btn btn-primary w-100 py-3 fw-semibold details-action-btn">
+                            <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ── Reviews ── -->
-    <div class="card app-card shadow-sm">
-        <div class="card-header details-review-header text-white">
-            <h3 class="mb-0 fw-bold text-white details-review-title">
+    <div class="card app-card details-card shadow-sm" data-ajax-region="reviews-@Model.ShoppingCart.MenuItemId">
+        <div class="card-header details-review-header">
+            <h3 class="mb-0 fw-bold details-review-title">
                 <i class="bi bi-star-fill text-warning"></i> Customer Reviews
                 @if (Model.Reviews.Any())
                 {
@@ -85,19 +120,19 @@
         </div>
             <div class="card-body">
                 <!-- Add Review Form -->
-                        <div class="border-bottom pb-4 mb-4">
+                        <div class="details-review-form-panel mb-4">
                             <h5 class="details-section-label mb-3">Write a Review</h5>
                             @if (User.Identity?.IsAuthenticated == true)
                             {
-                                <form method="post" asp-page-handler="AddReview">
+                                <form method="post" asp-page-handler="AddReview" data-ajax-form>
                                     <input asp-for="NewReview.MenuItemId" type="hidden" value="@Model.ShoppingCart.MenuItemId" />
                                     <div class="mb-3">
                                         <label class="form-label details-section-label">Rating</label>
-                                        <div class="btn-group" role="group">
+                                        <div class="d-flex flex-wrap gap-2">
                                             @for (int i = 1; i <= 5; i++)
                                             {
-                                                <input type="radio" class="btn-check" name="NewReview.Rating" id="star@(i)" value="@i" />
-                                                <label class="btn btn-outline-warning" for="star@(i)">
+                                                <input type="radio" class="btn-check" name="NewReview.Rating" id="star@(i)" value="@i" checked="@(Model.NewReview != null && Model.NewReview.Rating == i ? "checked" : null)" />
+                                                <label class="btn btn-outline-warning details-rating-btn" for="star@(i)">
                                                     <i class="bi bi-star-fill"></i> @i
                                                 </label>
                                             }
@@ -110,7 +145,7 @@
                                                   placeholder="Share your experience with this item..."></textarea>
                                         <span asp-validation-for="NewReview.Content" class="text-danger"></span>
                                     </div>
-                                     <button type="submit" class="btn btn-primary fw-semibold details-action-btn">
+                                     <button type="submit" class="btn btn-primary fw-semibold details-action-btn rounded-pill px-4">
                                         <i class="bi bi-send me-2"></i>Submit Review
                                     </button>
                                 </form>
@@ -128,12 +163,15 @@
                             <h5 class="details-section-label mb-3">All Reviews</h5>
                             @foreach (var review in Model.Reviews)
                             {
-                                <div class="card app-card mb-3">
+                                <div class="card app-card details-review-item mb-3">
                                     <div class="card-body">
-                                        <h6 class="fw-semibold mb-1">
-                                            @review.ApplicationUser.Name
-                                            <span class="text-muted fw-normal small">— @review.Date.ToString("MMM dd, yyyy")</span>
-                                        </h6>
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <span class="details-review-avatar">@(string.IsNullOrEmpty(review.ApplicationUser.Name) ? "?" : review.ApplicationUser.Name.Substring(0, 1).ToUpper())</span>
+                                            <h6 class="fw-semibold mb-0">
+                                                @review.ApplicationUser.Name
+                                                <span class="text-muted fw-normal small">— @review.Date.ToString("MMM dd, yyyy")</span>
+                                            </h6>
+                                        </div>
                                         <div class="mb-2">
                                             @for (int i = 1; i <= 5; i++)
                                             {
@@ -147,7 +185,7 @@
                                             <details class="mt-2">
                                                 <summary class="btn btn-sm btn-outline-secondary">Edit my review</summary>
                                                 <div class="mt-3">
-                                                    <form method="post" asp-page-handler="UpdateReview"
+                                                    <form method="post" asp-page-handler="UpdateReview" data-ajax-form
                                                           asp-route-id="@Model.ShoppingCart.MenuItemId"
                                                           asp-route-reviewId="@review.Id">
                                                         <div class="mb-2">
@@ -164,7 +202,7 @@
                                                     <form class="mt-2" method="post" asp-page-handler="DeleteReview"
                                                           asp-route-id="@Model.ShoppingCart.MenuItemId"
                                                           asp-route-reviewId="@review.Id"
-                                                          onsubmit="return confirm('Delete your review?');">
+                                                          onsubmit="return confirm('Delete your review?');" data-ajax-form>
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                                     </form>
                                                 </div>

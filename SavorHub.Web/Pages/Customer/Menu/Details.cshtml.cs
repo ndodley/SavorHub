@@ -24,6 +24,7 @@ namespace SavorHub.Web.Pages.Customer.Menu
         public double AverageRating { get; set; }
         public string? CurrentUserId { get; set; }
         public bool IsFavorite { get; set; }
+        public ShoppingCart? CartEntry { get; set; }
 
         public void OnGet(int id)
         {
@@ -40,6 +41,9 @@ namespace SavorHub.Web.Pages.Customer.Menu
             {
                 IsFavorite = _unitOfWork.Favorite.GetFirstOrDefault(
                     f => f.ApplicationUserId == CurrentUserId && f.MenuItemId == id) != null;
+
+                CartEntry = _unitOfWork.ShoppingCart.GetFirstOrDefault(
+                    sc => sc.ApplicationUserId == CurrentUserId && sc.MenuItemId == id);
             }
 
             // Load reviews for this menu item
@@ -82,11 +86,59 @@ namespace SavorHub.Web.Pages.Customer.Menu
                     _unitOfWork.ShoppingCart.IncrementCount(shoppingCartFromDb, ShoppingCart.Count);
                     TempData["success"] = "Cart updated successfully";
                 }
-                return RedirectToPage("Index");
+                return RedirectToPage(new { id = ShoppingCart.MenuItemId });
             }
 
             OnGet(ShoppingCart.MenuItemId);
             return Page();
+        }
+
+        public IActionResult OnPostIncrementCart(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Challenge();
+
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(sc => sc.ApplicationUserId == userId && sc.MenuItemId == id);
+            if (cart != null)
+            {
+                _unitOfWork.ShoppingCart.IncrementCount(cart, 1);
+            }
+            return RedirectToPage(new { id });
+        }
+
+        public IActionResult OnPostDecrementCart(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Challenge();
+
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(sc => sc.ApplicationUserId == userId && sc.MenuItemId == id);
+            if (cart != null)
+            {
+                if (cart.Count <= 1)
+                {
+                    _unitOfWork.ShoppingCart.Remove(cart);
+                    _unitOfWork.Save();
+                }
+                else
+                {
+                    _unitOfWork.ShoppingCart.DecrementCount(cart, 1);
+                }
+            }
+            return RedirectToPage(new { id });
+        }
+
+        public IActionResult OnPostRemoveCart(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Challenge();
+
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(sc => sc.ApplicationUserId == userId && sc.MenuItemId == id);
+            if (cart != null)
+            {
+                _unitOfWork.ShoppingCart.Remove(cart);
+                _unitOfWork.Save();
+            }
+            return RedirectToPage(new { id });
         }
 
         public IActionResult OnPostToggleFavorite(int id)
@@ -119,20 +171,15 @@ namespace SavorHub.Web.Pages.Customer.Menu
 
             if (string.IsNullOrWhiteSpace(NewReview.Content) || NewReview.Rating < 1 || NewReview.Rating > 5)
             {
+                // Re-render this page instead of redirecting, so the review text (and
+                // selected rating) the user already typed is not lost - a redirect would
+                // start a fresh GET and NewReview would come back empty.
                 TempData["error"] = "Please provide a valid review with rating between 1-5 and content (10-1000 characters).";
-                return RedirectToPage(new { id = NewReview.MenuItemId });
+                OnGet(NewReview.MenuItemId);
+                return Page();
             }
 
-            // Check if user already reviewed this item
-            var existingReview = _unitOfWork.Review.GetFirstOrDefault(
-                r => r.UserId == userId && r.MenuItemId == NewReview.MenuItemId);
-
-            if (existingReview != null)
-            {
-                TempData["error"] = "You have already reviewed this item.";
-                return RedirectToPage(new { id = NewReview.MenuItemId });
-            }
-
+            // Multiple reviews per user per item are allowed - no "already reviewed" check.
             NewReview.UserId = userId;
             NewReview.Date = DateTime.Now;
 

@@ -69,7 +69,7 @@
                     }
                 </div>
 
-                <div id="@carouselId" class="carousel slide" data-bs-ride="false">
+                <div id="@carouselId" class="carousel slide" data-bs-ride="false" data-bs-touch="false">
                     <div class="carousel-inner pb-2">
                         @for (int i = 0; i < chunks.Count; i++)
                         {
@@ -79,43 +79,76 @@
                                     {
                                         var item = fav.MenuItem!;
 
-                                        <div class="col-12 col-md-4">
-                                            <div class="position-relative">
-                                                <a asp-page="/Customer/Menu/Details" asp-route-id="@item.Id" class="text-decoration-none">
-                                                <div class="card h-100 shadow-sm border-0 hover-card">
-                                                    <div class="position-relative overflow-hidden rounded-top" style="height:210px;">
-                                                        <img src="@item.Image" class="w-100 h-100 object-fit-cover" alt="@item.Name" />
-                                                        <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark fw-semibold">
-                                                            @item.Category.Name
-                                                        </span>
-                                                    </div>
-                                                    <div class="card-body d-flex flex-column">
-                                                        <div class="d-flex align-items-start justify-content-between gap-2">
-                                                            <h5 class="card-title fw-semibold mb-1">@item.Name</h5>
-                                                            <span class="app-price fw-bold fs-5">$@item.Price</span>
+                                        <div class="col-12 col-md-4" data-ajax-region="fav-item-@fav.Id" data-ajax-remove-if-missing>
+                                            <div class="position-relative h-100">
+                                                <div class="card h-100 shadow-sm border-0 hover-card modern-menu-card d-flex flex-column">
+                                                    <a asp-page="/Customer/Menu/Details" asp-route-id="@item.Id" class="text-decoration-none text-reset d-flex flex-column flex-grow-1">
+                                                        <div class="menu-card-img-wrap position-relative">
+                                                            <img src="@item.Image" class="menu-card-img" alt="@item.Name" />
+                                                            <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark fw-semibold">
+                                                                @item.Category.Name
+                                                            </span>
                                                         </div>
-                                                        <span class="badge app-food-type-badge mb-2" style="width:fit-content;">
-                                                            @item.FoodType.Name
-                                                        </span>
-                                                        <p class="text-muted small mb-3 menu-card-desc">
-                                                            @Html.Raw(item.Description)
-                                                        </p>
-                                                        <div class="mt-auto"></div>
+                                                        <div class="card-body d-flex flex-column flex-grow-1">
+                                                            <div class="d-flex align-items-start justify-content-between gap-2">
+                                                                <h5 class="card-title fw-semibold mb-1">@item.Name</h5>
+                                                                <span class="app-price fw-bold fs-5">$@item.Price</span>
+                                                            </div>
+                                                            <span class="badge app-food-type-badge mb-2" style="width:fit-content;">
+                                                                @item.FoodType.Name
+                                                            </span>
+                                                            <p class="text-muted small mb-0 menu-card-desc">
+                                                                @Html.Raw(item.Description)
+                                                            </p>
+                                                        </div>
+                                                    </a>
+                                                    <div class="card-footer bg-transparent border-0 pt-0" data-ajax-region="cart-@item.Id">
+                                                        @if (Model.CartByMenuItemId.TryGetValue(item.Id, out var cartEntry))
+                                                        {
+                                                            <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+                                                                <form method="post" asp-page-handler="DecrementCart" data-ajax-form>
+                                                                    <input type="hidden" name="menuItemId" value="@item.Id" />
+                                                                    <button type="submit" class="btn cart-qty-btn" aria-label="Decrease quantity">
+                                                                        <i class="bi bi-dash"></i>
+                                                                    </button>
+                                                                </form>
+                                                                <span class="fw-semibold cart-qty-value">@cartEntry.Count</span>
+                                                                <form method="post" asp-page-handler="IncrementCart" data-ajax-form>
+                                                                    <input type="hidden" name="menuItemId" value="@item.Id" />
+                                                                    <button type="submit" class="btn cart-qty-btn" aria-label="Increase quantity">
+                                                                        <i class="bi bi-plus"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                            <form method="post" asp-page-handler="RemoveCart" data-ajax-form>
+                                                                <input type="hidden" name="menuItemId" value="@item.Id" />
+                                                                <button type="submit" class="btn btn-outline-danger w-100 fw-semibold">
+                                                                    <i class="bi bi-cart-x me-2"></i>Remove from Cart
+                                                                </button>
+                                                            </form>
+                                                        }
+                                                        else
+                                                        {
+                                                            <form method="post" asp-page-handler="AddToCart" data-ajax-form>
+                                                                <input type="hidden" name="menuItemId" value="@item.Id" />
+                                                                <button type="submit" class="btn btn-primary w-100 fw-semibold">
+                                                                    <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                                                                </button>
+                                                            </form>
+                                                        }
                                                     </div>
                                                 </div>
-                                            </a>
-
-                                            <form method="post" asp-page-handler="Remove"
+                                                <form method="post" asp-page-handler="Remove"
                                                     class="position-absolute top-0 start-0 m-2" style="z-index:2;"
-                                                    onsubmit="return confirm('Remove from favourites?');">
+                                                    onsubmit="return confirm('Remove from favourites?');" data-ajax-form>
                                                     <input type="hidden" name="id" value="@fav.Id" />
-                                                    <button type="submit" class="btn btn-light btn-sm rounded-pill shadow-sm" title="Remove favourite" aria-label="Remove favourite">
+                                                    <button type="submit" class="btn btn-sm rounded-pill card-icon-btn" title="Remove favourite" aria-label="Remove favourite">
                                                         <i class="bi bi-heart-fill text-danger"></i>
                                                     </button>
                                                 </form>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
                                 </div>
                             </div>
                         }

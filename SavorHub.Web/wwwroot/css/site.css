@@ -178,13 +178,42 @@ body {
 }
 
 /* ── Menu details page ─────────────────────────────────────── */
-.details-item-header {
-  background-color: var(--app-surface);
+/* Rounds off both the item card and the reviews card so they match the
+   modernized menu/favourites cards elsewhere in the app. */
+.details-card {
+  border-radius: 1rem;
+  overflow: hidden;
 }
 
+.details-item-header {
+  background-color: var(--app-surface);
+  border-bottom: 1px solid var(--app-border);
+}
+
+/* No-crop hero image, same idea as .menu-card-img-wrap: contain inside a
+   fixed-aspect frame instead of cropping with object-fit:cover. */
+.details-hero-img-wrap {
+  aspect-ratio: 4 / 3;
+  background-color: var(--app-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.details-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* A soft warm gradient instead of the flat near-black Bootstrap "primary"
+   bar, so it reads as part of the app's theme instead of a generic
+   Bootstrap section - and actually shifts with light/dark mode. */
 .details-review-header {
-  background-color: var(--bs-primary) !important;
-  border-bottom: 0;
+  background: linear-gradient(135deg, var(--app-surface), var(--app-border));
+  border-bottom: 3px solid var(--app-accent);
 }
 
 .details-review-title {
@@ -194,10 +223,46 @@ body {
   flex-wrap: wrap;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--app-text);
 }
 
 .details-review-badge {
   font-size: 0.9rem;
+}
+
+/* Round initials avatar shown next to each reviewer's name. */
+.details-review-avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: var(--app-accent);
+  color: #1a1a1a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Individual review entries get the same rounded, modern treatment as the
+   outer cards. */
+.details-review-item {
+  border-radius: 0.75rem;
+}
+
+/* Write-a-review panel: a softly inset, rounded surface instead of a plain
+   bottom border, so it reads as its own modern card-within-a-card. */
+.details-review-form-panel {
+  background-color: var(--app-bg);
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+/* Pill-shaped star-rating buttons instead of a merged square btn-group. */
+.details-rating-btn {
+  border-radius: 2rem !important;
 }
 
 .details-section-label {
@@ -256,6 +321,103 @@ body {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Modernized menu/favourites item cards: rounded, and the image is never
+   cropped - object-fit:contain inside a fixed-aspect-ratio frame with a
+   soft fallback background, instead of the old object-fit:cover crop. */
+.modern-menu-card {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.menu-card-img-wrap {
+  aspect-ratio: 4 / 3;
+  background-color: var(--app-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Cart quantity stepper on menu/favourites/homepage/details cards. Bootstrap's
+   btn-outline-secondary was too faint to read against either theme, so this
+   uses the app's own accent-bordered look (same family as .carousel-side-arrow)
+   for a clearly visible, modernized +/- control in both light and dark mode. */
+.cart-qty-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1.05rem;
+  border: 1.5px solid var(--app-accent);
+  background-color: var(--app-surface);
+  color: var(--app-text);
+  box-shadow: var(--app-card-shadow);
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.cart-qty-btn:hover {
+  background-color: var(--app-accent);
+  color: #1a1a1a;
+  transform: scale(1.06);
+}
+
+.cart-qty-value {
+  min-width: 1.5rem;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+/* Floating icon button used for the favourite-heart toggle/remove overlay on
+   menu/favourites/homepage cards. Was plain Bootstrap btn-light, which is a
+   flat white circle regardless of theme; this uses the app's own surface/
+   border tokens instead so it reads as part of the card in both themes. */
+.card-icon-btn {
+  background-color: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-card-shadow);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.card-icon-btn:hover {
+  background-color: var(--app-accent);
+  transform: scale(1.08);
+}
+
+/* ── Featured-items carousel side arrows ──────────────────────
+   Sit outside the row of item cards (not overlapping them) so they never
+   compete with the cart buttons for clicks. Uses the same theme tokens as
+   the cards so it reads correctly in both light and dark mode. */
+.carousel-side-arrow {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1.25rem;
+  background-color: var(--app-surface);
+  border: 1px solid var(--app-border);
+  color: var(--app-text);
+  box-shadow: var(--app-card-shadow);
+  transition: background-color 0.15s ease, transform 0.15s ease, color 0.15s ease;
+}
+
+.carousel-side-arrow:hover {
+  background-color: var(--app-accent);
+  border-color: var(--app-accent);
+  color: #1a1a1a;
+  transform: scale(1.06);
 }
 
 /* ── Theme toggle button ───────────────────────────────────── */

@@ -36,7 +36,7 @@ Supports persistent **Light / Dark mode**.
 
 | Area | Highlights |
 |:---|:---|
-| **Customer** | Menu browsing by category, featured items carousel, item detail with reviews, cart, Stripe checkout, order history, favourites |
+| **Customer** | Menu browsing by category, featured items carousel, item detail with reviews, quantity stepper cart controls, favourites, Stripe checkout, order history — cart, favourite, and review actions update instantly without a page reload |
 | **Admin** *(Manager)* | CRUD for categories, food types, and menu items; TinyMCE rich-text editor; image upload; bulk CSV import/export; review moderation |
 | **Operations** *(Manager / Front Desk / Kitchen)* | Live order queue with status filter pills; progress orders Submitted → In Process → Ready; complete, cancel, and refund actions |
 
@@ -140,7 +140,7 @@ Update-Database
 
 <br>
 
-**Menu page** — items grouped by category, per-category carousel, food type badge, star rating, and favourites toggle.
+**Menu page** — items grouped by category, per-category carousel, food type badge, star rating, favourites toggle, and an in-cart quantity stepper that updates instantly without reloading the page.
 
 <img width="1915" height="1033" alt="SavorHub menu page" src="https://github.com/user-attachments/assets/1ba9ee32-90bf-40a9-8cf1-ee707bd6d99e" />
 
@@ -152,7 +152,7 @@ Update-Database
 
 <br>
 
-**Item details** — image, description, category / food-type badges, price, quantity selector, and customer reviews.
+**Item details** — image, description, category / food-type badges, price, an in-cart quantity stepper, and customer reviews (multiple reviews per customer supported).
 
 <img width="1913" height="1029" alt="SavorHub item details page" src="https://github.com/user-attachments/assets/3c2d8027-2c44-4e6e-8ef2-e491b30f969a" />
 
@@ -226,7 +226,7 @@ Update-Database
 
 <br>
 
-**Favourites** — saved items in a category carousel. Heart button removes an item.
+**Favourites** — saved items in a category carousel. Heart button removes an item instantly without reloading the page.
 
 <img width="1914" height="1032" alt="SavorHub favourites page" src="https://github.com/user-attachments/assets/77de4d9c-2ead-40f3-a227-16976bb32bcd" />
 
