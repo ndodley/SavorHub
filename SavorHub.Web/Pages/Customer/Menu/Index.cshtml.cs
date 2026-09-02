@@ -20,6 +20,7 @@ namespace SavorHub.Web.Pages.Customer.Menu
         public Dictionary<int, (double AverageRating, int ReviewCount)> MenuItemRatings { get; set; }
 
         public HashSet<int> FavoriteMenuItemIds { get; set; } = [];
+        public Dictionary<int, ShoppingCart> CartByMenuItemId { get; set; } = [];
 
         public void OnGet()
         {
@@ -45,7 +46,94 @@ namespace SavorHub.Web.Pages.Customer.Menu
                     .GetAll(f => f.ApplicationUserId == userId)
                     .Select(f => f.MenuItemId)
                     .ToHashSet();
+
+                CartByMenuItemId = _unitOfWork.ShoppingCart
+                    .GetAll(sc => sc.ApplicationUserId == userId)
+                    .ToDictionary(sc => sc.MenuItemId, sc => sc);
             }
+        }
+
+        public IActionResult OnPostAddToCart(int menuItemId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Challenge();
+            }
+
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(sc => sc.ApplicationUserId == userId && sc.MenuItemId == menuItemId);
+            if (cart == null)
+            {
+                _unitOfWork.ShoppingCart.Add(new ShoppingCart
+                {
+                    ApplicationUserId = userId,
+                    MenuItemId = menuItemId,
+                    Count = 1
+                });
+                _unitOfWork.Save();
+            }
+            else
+            {
+                _unitOfWork.ShoppingCart.IncrementCount(cart, 1);
+            }
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostIncrementCart(int menuItemId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Challenge();
+            }
+
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(sc => sc.ApplicationUserId == userId && sc.MenuItemId == menuItemId);
+            if (cart != null)
+            {
+                _unitOfWork.ShoppingCart.IncrementCount(cart, 1);
+            }
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostDecrementCart(int menuItemId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Challenge();
+            }
+
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(sc => sc.ApplicationUserId == userId && sc.MenuItemId == menuItemId);
+            if (cart != null)
+            {
+                if (cart.Count <= 1)
+                {
+                    _unitOfWork.ShoppingCart.Remove(cart);
+                    _unitOfWork.Save();
+                }
+                else
+                {
+                    _unitOfWork.ShoppingCart.DecrementCount(cart, 1);
+                }
+            }
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostRemoveCart(int menuItemId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Challenge();
+            }
+
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(sc => sc.ApplicationUserId == userId && sc.MenuItemId == menuItemId);
+            if (cart != null)
+            {
+                _unitOfWork.ShoppingCart.Remove(cart);
+                _unitOfWork.Save();
+            }
+            return RedirectToPage();
         }
 
         public IActionResult OnPostToggleFavorite(int menuItemId)

@@ -108,12 +108,14 @@
 
     @if (TempData["success"] != null)
     {
+        <div id="ajax-toast-success" hidden>@TempData["success"]</div>
         <script>
             toastr.success('@TempData["success"]');
         </script>
     }
     @if (TempData["error"] != null)
     {
+        <div id="ajax-toast-error" hidden>@TempData["error"]</div>
         <script>
             toastr.error('@TempData["error"]');
         </script>
