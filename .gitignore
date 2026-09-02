@@ -367,3 +367,4 @@ appsettings.Development.json
 appsettings.Production.json
 appsettings.Staging.json
 **/secrets.json
+/.write_test_leftover
