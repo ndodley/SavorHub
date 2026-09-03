@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SavorHub.Data.Repository.IRepository;
@@ -7,6 +8,7 @@ using SavorHub.Utilities;
 
 namespace SavorHub.Web.Pages.Admin.Order
 {
+    [Authorize(Roles = $"{SD.ManagerRole},{SD.FrontDeskRole}")]
     public class OrderDetailsModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

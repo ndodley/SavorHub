@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SavorHub.Data.Repository.IRepository;
 using SavorHub.Utilities;
+using System.Security.Claims;
 
 namespace SavorHub.Web.Controllers
 {
@@ -17,7 +18,7 @@ namespace SavorHub.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = $"{SD.ManagerRole},{SD.FrontDeskRole}")]
         public IActionResult Get(string? status = null)
         {
 
@@ -56,6 +57,13 @@ namespace SavorHub.Web.Controllers
         [Authorize]
         public IActionResult GetUserOrders(string userId)
         {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            bool isStaff = User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.FrontDeskRole) || User.IsInRole(SD.KitchenRole);
+            if (currentUserId != userId && !isStaff)
+            {
+                return Forbid();
+            }
+
             var OrderHeaderList = _unitOfWork.OrderHeader.GetAll(u => u.UserId == userId, includeProperties: "ApplicationUser");
             return Json(new { data = OrderHeaderList });
         }

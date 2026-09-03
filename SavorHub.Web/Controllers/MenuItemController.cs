@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SavorHub.Data.Repository.IRepository;
 using SavorHub.Models;
+using SavorHub.Utilities;
 using System.Globalization;
 using System.Text;
 
@@ -8,6 +10,7 @@ namespace SavorHub.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = SD.ManagerRole)]
     public class MenuItemController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

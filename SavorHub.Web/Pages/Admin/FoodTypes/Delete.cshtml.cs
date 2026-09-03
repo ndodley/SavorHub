@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SavorHub.Data.Repository.IRepository;
 using SavorHub.Models;
+using SavorHub.Utilities;
 
 namespace SavorHub.Web.Pages.Admin.FoodTypes
 {
+    [Authorize(Roles = SD.ManagerRole)]
     [BindProperties]
     public class DeleteModel : PageModel
     {
