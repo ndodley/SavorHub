@@ -62,7 +62,8 @@ namespace SavorHub.Web.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var review = _unitOfWork.Review.GetFirstOrDefault(r => r.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var review = _unitOfWork.Review.GetFirstOrDefault(r => r.Id == id && r.UserId == userId);
             if (review == null)
             {
                 return Json(new { success = false, message = "Error while deleting" });

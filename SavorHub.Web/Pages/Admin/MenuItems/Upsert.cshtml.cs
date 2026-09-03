@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SavorHub.Data.Repository.IRepository;
 using SavorHub.Models;
+using SavorHub.Utilities;
 
 namespace SavorHub.Web.Pages.Admin.MenuItems
 {
+    [Authorize(Roles = SD.ManagerRole)]
     [BindProperties]
     public class UpsertModel : PageModel
     {
