@@ -46,6 +46,13 @@ namespace SavorHub.Web.Pages.Admin.MenuItems
 
         public async Task<IActionResult> OnPost()
         {
+            // The Description field renders as a TinyMCE rich-text editor
+            // (see Upsert.cshtml), and its underlying <textarea> isn't
+            // guaranteed to be included in the form submission unless the
+            // editor has synced back to it - if a Manager submits without
+            // ever interacting with that field, MenuItem.Description binds
+            // to null here, which the database column doesn't allow.
+            MenuItem.Description ??= string.Empty;
 
             string webRootPath = _hostEnvironment.WebRootPath; // points to the root directory of the wwwroot folder
             var files = HttpContext.Request.Form.Files;
