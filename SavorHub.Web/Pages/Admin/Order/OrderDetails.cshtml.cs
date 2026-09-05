@@ -18,13 +18,27 @@ namespace SavorHub.Web.Pages.Admin.Order
         {
             _unitOfWork = unitOfWork;
         }
-        public void OnGet(int id)
+        // Returns IActionResult (not void) so a bad/stale id - e.g. someone revisiting
+        // an old link, or manually editing the query string - can return NotFound()
+        // instead of leaving OrderDetailVM.OrderHeader null. Previously this was void
+        // and unconditionally built OrderDetailVM from GetFirstOrDefault's result, so a
+        // nonexistent id crashed with a NullReferenceException the moment
+        // OrderDetails.cshtml dereferenced Model.OrderDetailVM.OrderHeader.Id - the same
+        // class of bug as MenuItems/Upsert.cshtml.cs's missing objFromDb check.
+        public IActionResult OnGet(int id)
         {
+            var orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id, includeProperties: "ApplicationUser");
+            if (orderHeader == null)
+            {
+                return NotFound();
+            }
+
             OrderDetailVM = new()
             {
-                OrderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id, includeProperties: "ApplicationUser"),
+                OrderHeader = orderHeader,
                 OrderDetails = _unitOfWork.OrderDetail.GetAll(u => u.OrderId == id, includeProperties: "MenuItem").ToList()
             };
+            return Page();
         }
 
         public IActionResult OnPostOrderCompleted(int orderId) // Completed
@@ -34,23 +48,6 @@ namespace SavorHub.Web.Pages.Admin.Order
             return RedirectToPage("OrderList");
         }
 
-        /*public IActionResult OnPostOrderRefund(int orderId) // Refund
-        {
-            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(o => o.Id == orderId);
-
-            var options = new RefundCreateOptions
-            {
-                Reason = RefundReasons.RequestedByCustomer,
-                PaymentIntent = orderHeader.PaymentIntentId
-            };
-
-            var service = new RefundService();
-            Refund refund = service.Create(options);
-
-            _unitOfWork.OrderHeader.UpdateStatus(orderId, SD.StatusRefunded);
-            _unitOfWork.Save();
-            return RedirectToPage("OrderList");
-        }*/
 
         public IActionResult OnPostOrderCancel(int orderId) // Cancel
         {
