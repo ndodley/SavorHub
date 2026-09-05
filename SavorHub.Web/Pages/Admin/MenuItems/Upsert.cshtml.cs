@@ -32,6 +32,16 @@ namespace SavorHub.Web.Pages.Admin.MenuItems
                 //Edit
                 MenuItem = _unitOfWork.MenuItem.GetFirstOrDefault(u => u.Id == id);
             }
+            PopulateDropdowns();
+        }
+
+        // [BindProperties] only re-binds MenuItem's own properties on a POST -
+        // CategoryList/FoodTypeList are ordinary page properties, not bound from
+        // the request, so any OnPost path that returns Page() instead of
+        // redirecting must repopulate them itself or the re-rendered form's
+        // dropdowns come back empty.
+        private void PopulateDropdowns()
+        {
             CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem()
             {
                 Text = i.Name,
@@ -59,6 +69,16 @@ namespace SavorHub.Web.Pages.Admin.MenuItems
             if (MenuItem.Id == 0)
             {
                 //create
+                if (files.Count == 0)
+                {
+                    // Mirrors Upsert.cshtml's client-side ValidateInput() check -
+                    // that JS is the only thing stopping this today, and a request
+                    // that skips it (or simply has JS disabled) would otherwise hit
+                    // files[0] below with no file present.
+                    ModelState.AddModelError(string.Empty, "Please upload an image.");
+                    PopulateDropdowns();
+                    return Page();
+                }
                 string fileName_new = Guid.NewGuid().ToString();
                 var uploads = Path.Combine(webRootPath, @"images\menuItems");
                 var extension = Path.GetExtension(files[0].FileName);
@@ -75,6 +95,10 @@ namespace SavorHub.Web.Pages.Admin.MenuItems
             {
                 //edit
                 var objFromDb = _unitOfWork.MenuItem.GetFirstOrDefault(u => u.Id == MenuItem.Id);
+                if (objFromDb == null)
+                {
+                    return NotFound();
+                }
                 if (files.Count > 0)
                 {
                     string fileName_new = Guid.NewGuid().ToString();

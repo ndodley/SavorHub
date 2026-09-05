@@ -112,16 +112,17 @@
 									Model.OrderDetailVM.OrderHeader.Status == SD.StatusSubmitted ||
 									Model.OrderDetailVM.OrderHeader.Status == SD.StatusInProcess))
 						{
-							<div class="col-6">
+							<!-- Refund used to render here (asp-page-handler="OrderRefund"), but
+							     OrderDetails.cshtml.cs's OnPostOrderRefund handler is commented out
+							     (it depends on a real Stripe RefundService call that was never
+							     finished) - clicking it posted to a handler name Razor Pages
+							     couldn't find, which fails the request outright. Removed until the
+							     handler is actually implemented, rather than shipping a button
+							     that errors every time a Manager or Front Desk user clicks it. -->
+							<div class="col-12">
 								<button type="submit" class="btn btn-outline-warning w-100"
 										asp-page-handler="OrderCancel" asp-route-orderId="@Model.OrderDetailVM.OrderHeader.Id">
 									<i class="bi bi-x-square me-1"></i> Cancel
-								</button>
-							</div>
-							<div class="col-6">
-								<button type="submit" class="btn btn-outline-danger w-100"
-										asp-page-handler="OrderRefund" asp-route-orderId="@Model.OrderDetailVM.OrderHeader.Id">
-									<i class="bi bi-currency-dollar me-1"></i> Refund
 								</button>
 							</div>
 						}
