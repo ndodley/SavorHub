@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SavorHub.Data.Repository.IRepository;
 using SavorHub.Models;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Security.Claims;
 using Xunit;
 
 namespace SavorHub.Web.Tests
@@ -160,7 +162,10 @@ namespace SavorHub.Web.Tests
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.OrderHeader).Returns(orderHeaderRepositoryMock.Object);
 
-            var controller = new OrderController(unitOfWorkMock.Object);
+            var controller = new OrderController(unitOfWorkMock.Object)
+            {
+                ControllerContext = CreateControllerContext(userId)
+            };
 
             var result = controller.GetUserOrders(userId) as JsonResult;
 
@@ -172,6 +177,40 @@ namespace SavorHub.Web.Tests
             Assert.NotNull(returnedOrders);
             Assert.Equal(2, returnedOrders.Count());
             Assert.All(returnedOrders, o => Assert.Equal(userId, o.UserId));
+        }
+
+        [Fact]
+        public void GetUserOrders_ReturnsForbid_WhenUserRequestsAnotherUsersOrders()
+        {
+            var orderHeaderRepositoryMock = new Mock<IOrderHeaderRepository>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.OrderHeader).Returns(orderHeaderRepositoryMock.Object);
+
+            var controller = new OrderController(unitOfWorkMock.Object)
+            {
+                ControllerContext = CreateControllerContext("user-1")
+            };
+
+            var result = controller.GetUserOrders("user-2");
+
+            Assert.IsType<ForbidResult>(result);
+            orderHeaderRepositoryMock.Verify(
+                r => r.GetAll(It.IsAny<System.Linq.Expressions.Expression<System.Func<OrderHeader, bool>>>(), It.IsAny<System.Func<System.Linq.IQueryable<OrderHeader>, System.Linq.IOrderedQueryable<OrderHeader>>>(), It.IsAny<string>()),
+                Times.Never);
+        }
+
+        private static ControllerContext CreateControllerContext(string userId, params string[] roles)
+        {
+            var claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, userId) };
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            return new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(claims, "TestAuth"))
+                }
+            };
         }
     }
 }
