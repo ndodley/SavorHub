@@ -81,6 +81,14 @@ document.addEventListener('submit', function (e) {
         .then(function (html) {
             var key = region.getAttribute('data-ajax-region');
             var doc = new DOMParser().parseFromString(html, 'text/html');
+
+            // Keep the navbar cart badge in sync - it lives outside the swapped
+            // region, so copy the freshly rendered one from the server response.
+            var newBadge = doc.getElementById('cart-count-badge');
+            var badge = document.getElementById('cart-count-badge');
+            if (newBadge && badge) {
+                badge.replaceWith(newBadge);
+            }
             var newRegion = doc.querySelector('[data-ajax-region="' + key + '"]');
             if (!newRegion) {
                 if (region.hasAttribute('data-ajax-remove-if-missing')) {

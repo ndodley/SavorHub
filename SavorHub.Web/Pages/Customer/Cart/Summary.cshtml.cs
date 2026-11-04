@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SavorHub.Data.Repository.IRepository;
@@ -95,7 +95,9 @@ namespace SavorHub.Web.Pages.Customer.Cart
                 Mode = "payment",
                 SuccessUrl = domain + $"Customer/Cart/OrderConfirmation?id={OrderHeader.Id}",
                 CancelUrl = domain + "Customer/Cart/Index",
-                PaymentMethodTypes = ["card"],
+                // Stripe.net 53 (API 2026-09-30.endive) removed PaymentMethodTypes;
+                // AllowedPaymentMethodTypes keeps checkout restricted to cards.
+                AllowedPaymentMethodTypes = ["card"],
                 // Pre-fill email so Stripe skips the email step and does not
                 // prompt for Stripe Link authentication.
                 CustomerEmail = applicationUser?.Email,
@@ -115,7 +117,11 @@ namespace SavorHub.Web.Pages.Customer.Cart
                         Currency = "usd",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
-                            Name = item.MenuItem.Name
+                            Name = item.MenuItem.Name,
+                            // Stripe downloads product images from its own servers, so the
+                            // URL must be publicly reachable over HTTPS. Images on localhost
+                            // can't be fetched, so they're only sent once the site is deployed.
+                            Images = BuildStripeImageList(domain, item.MenuItem.Image)
                         }
                     },
                     Quantity = item.Count
@@ -133,6 +139,23 @@ namespace SavorHub.Web.Pages.Customer.Cart
             Response.Headers.Append("Location", session.Url);
             return new StatusCodeResult(303);
         }
+
+        private static List<string>? BuildStripeImageList(string domain, string? imagePath)
+        {
+            if (string.IsNullOrWhiteSpace(imagePath))
+            {
+                return null;
+            }
+
+            var baseUri = new Uri(domain);
+            if (baseUri.IsLoopback || baseUri.Scheme != Uri.UriSchemeHttps)
+            {
+                return null;
+            }
+
+            // Stored paths look like "\images\menuItems\abc.png" - convert to a URL path.
+            var relativePath = imagePath.Replace('\\', '/').TrimStart('/');
+            return [new Uri(baseUri, relativePath).ToString()];
+        }
     }
 }
-

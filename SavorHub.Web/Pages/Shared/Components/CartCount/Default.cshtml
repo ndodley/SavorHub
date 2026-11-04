@@ -1,0 +1,8 @@
+﻿@model int
+
+@* id is used by site.js to refresh the badge after AJAX cart actions *@
+<span id="cart-count-badge"
+      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger @(Model > 0 ? "" : "d-none")"
+      aria-label="@Model items in cart">
+    @(Model > 99 ? "99+" : Model.ToString())
+</span>
