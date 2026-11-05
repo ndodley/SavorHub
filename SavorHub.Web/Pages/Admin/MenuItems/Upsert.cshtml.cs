@@ -107,7 +107,11 @@ namespace SavorHub.Web.Pages.Admin.MenuItems
 
                     //delete the old image
                     var oldImagePath = Path.Combine(webRootPath, objFromDb.Image.TrimStart('\\'));
-                    if (System.IO.File.Exists(oldImagePath))
+                    // Keep the file if it's the shared placeholder or another menu item still uses it.
+                    var imageIsShared = SD.IsDefaultMenuItemImage(objFromDb.Image) ||
+                        _unitOfWork.MenuItem.GetAll().Any(m => m.Id != objFromDb.Id &&
+                            string.Equals(SD.NormalizeImagePath(m.Image), SD.NormalizeImagePath(objFromDb.Image), StringComparison.OrdinalIgnoreCase));
+                    if (!imageIsShared && System.IO.File.Exists(oldImagePath))
                     {
                         System.IO.File.Delete(oldImagePath);
                     }

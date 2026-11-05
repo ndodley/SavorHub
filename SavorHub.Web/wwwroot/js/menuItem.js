@@ -37,6 +37,7 @@ $(document).ready(function () {
             success: function (response) {
                 alert(response);
                 dataTable.ajax.reload();
+                clearCsvPreview();
             },
             error: function (error) {
                 alert("Error uploading file");
@@ -81,17 +82,60 @@ function loadList() {
     });
 }
 
+// Parses CSV text into rows of fields, handling quoted values that contain
+// commas, quotes ("") or line breaks - matches CsvUtility.Parse on the server.
+function parseCsv(text) {
+    var rows = [], row = [], field = '', inQuotes = false;
+    text = text.replace(/^\uFEFF/, '');
+
+    for (var i = 0; i < text.length; i++) {
+        var c = text[i];
+        if (inQuotes) {
+            if (c === '"') {
+                if (text[i + 1] === '"') { field += '"'; i++; }
+                else { inQuotes = false; }
+            } else {
+                field += c;
+            }
+        } else if (c === '"') {
+            inQuotes = true;
+        } else if (c === ',') {
+            row.push(field); field = '';
+        } else if (c === '\r' || c === '\n') {
+            if (c === '\r' && text[i + 1] === '\n') i++;
+            row.push(field); field = '';
+            if (!(row.length === 1 && row[0] === '')) rows.push(row);
+            row = [];
+        } else {
+            field += c;
+        }
+    }
+    row.push(field);
+    if (!(row.length === 1 && row[0] === '')) rows.push(row);
+    return rows;
+}
+
+// Hides the preview table and resets the file picker after a successful upload,
+// so the page only shows the saved menu items.
+function clearCsvPreview() {
+    if ($.fn.DataTable.isDataTable('#csvTable')) {
+        $('#csvTable').DataTable().clear().destroy();
+        $('#csvTable').empty();
+    }
+    $('#csvTableContainer').hide();
+    $('#csvFileInput').val('');
+}
+
 function displayCSVData(csvData) {
-    var lines = csvData.split('\n');
-    var headers = lines[0].split(',');
+    var rows = parseCsv(csvData);
+    if (rows.length === 0) return;
+    var headers = rows[0].map(function (h) { return h.trim(); });
 
     var data = [];
-    for (var i = 1; i < lines.length; i++) {
-        if (!lines[i]) continue;
+    for (var i = 1; i < rows.length; i++) {
         var obj = {};
-        var currentline = lines[i].split(',');
         for (var j = 0; j < headers.length; j++) {
-            obj[headers[j]] = currentline[j];
+            obj[headers[j]] = rows[i][j] || '';
         }
         data.push(obj);
     }
@@ -104,7 +148,15 @@ function displayCSVData(csvData) {
                     title: header,
                     data: header,
                     render: function (data) {
-                        return `<img src="/${data}" alt="Image" style="width: 50px; height: 50px;" />`;
+                        if (!data) return '';
+                        var path = data.replace(/\\/g, '/');
+                        // Web paths from an export (e.g. /images/menuItems/x.png) can be previewed;
+                        // full paths on disk (from the sample template) can't, so show the text.
+                        if (/^\/?images\//i.test(path)) {
+                            var src = path.charAt(0) === '/' ? path : '/' + path;
+                            return `<img src="${src}" alt="Image" style="width: 50px; height: 50px;" />`;
+                        }
+                        return $('<span>').text(data).prop('outerHTML');
                     }
                 };
             } else {
