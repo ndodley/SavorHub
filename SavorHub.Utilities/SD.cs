@@ -23,5 +23,31 @@ namespace SavorHub.Utilities
         public const string StatusRefunded = "Refunded";
         //public const string SessionCart = "SessionCart";
 
+        // Shared placeholder used when a menu item has no image (e.g. CSV upload
+        // without an image path). It lives outside images/menuItems and must never
+        // be deleted when an individual menu item is removed or its image replaced.
+        public const string DefaultMenuItemImage = "/images/no-image.svg";
+
+        public static bool IsDefaultMenuItemImage(string? imagePath)
+        {
+            if (string.IsNullOrWhiteSpace(imagePath))
+            {
+                return false;
+            }
+
+            return string.Equals(NormalizeImagePath(imagePath), DefaultMenuItemImage, StringComparison.OrdinalIgnoreCase);
+        }
+
+        // "\images\menuItems\x.png" and "images/menuItems/x.png" -> "/images/menuItems/x.png"
+        public static string NormalizeImagePath(string? imagePath)
+        {
+            if (string.IsNullOrWhiteSpace(imagePath))
+            {
+                return string.Empty;
+            }
+
+            return "/" + imagePath.Replace('\\', '/').TrimStart('/');
+        }
+
     }
 }

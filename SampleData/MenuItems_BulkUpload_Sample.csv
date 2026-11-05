@@ -1,0 +1,9 @@
+﻿Name,Description,Price,Category,FoodType,Image
+Garlic Bread,"Toasted bread with garlic butter, parsley, and parmesan.",3.49,Appetizer,Veg,
+Chicken Alfredo,"Creamy alfredo sauce over fettuccine.
+Topped with grilled chicken and fresh basil.",10.99,Entree,Non-Veg,
+Iced Lemonade,"Fresh-squeezed lemonade with a ""hint"" of mint.",2.49,Drink,Drink,/images/menuItems/97b44ffb-ab73-4f2a-9049-a2152588d1d2.png
+Fried Shrimp,Ebi Fried Shrimp,4.99,Appetizer,Non-Veg,/images/menuItems/d5217a39-f1f4-4f85-912f-10536aee09a3.png
+Soda,Soft Soda Drinks,1.99,Drink,Drink,
+Breakfast Burrito,"Eggs, cheese, and sausage in a flour tortilla.",6.99,Breakfast,Non-Veg,
+Mystery Special,Price is missing on purpose.,abc,Entree,Veg,

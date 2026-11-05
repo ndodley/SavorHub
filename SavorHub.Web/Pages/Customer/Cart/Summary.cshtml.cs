@@ -142,7 +142,8 @@ namespace SavorHub.Web.Pages.Customer.Cart
 
         private static List<string>? BuildStripeImageList(string domain, string? imagePath)
         {
-            if (string.IsNullOrWhiteSpace(imagePath))
+            // Skip missing images and the SVG placeholder (Checkout only shows JPG/PNG/GIF).
+            if (string.IsNullOrWhiteSpace(imagePath) || SD.IsDefaultMenuItemImage(imagePath))
             {
                 return null;
             }

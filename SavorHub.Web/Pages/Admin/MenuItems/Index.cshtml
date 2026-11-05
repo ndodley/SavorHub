@@ -27,8 +27,11 @@
 	</div>
 
 	<div class="admin-card p-4 mt-4">
-		<h5 class="mb-3"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Download / Upload CSV</h5>
+		<h5 class="mb-3"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Export / Upload CSV</h5>
 		<div class="d-flex flex-wrap gap-2 align-items-center">
+			<a href="/api/MenuItem/ExportCSV" class="btn btn-outline-success">
+				<i class="bi bi-filetype-csv me-1"></i> Export CSV
+			</a>
 			<a href="/api/MenuItem/DownloadSampleCSV" class="btn btn-outline-warning">
 				<i class="bi bi-download me-1"></i> Download Sample CSV
 			</a>
@@ -46,5 +49,5 @@
 </div>
 
 @section Scripts {
-	<script src="~/js/menuItem.js"></script>
+	<script src="~/js/menuItem.js" asp-append-version="true"></script>
 }

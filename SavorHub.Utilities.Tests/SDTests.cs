@@ -79,5 +79,23 @@ namespace SavorHub.Utilities.Tests
         {
             Assert.Equal("Refunded", SD.StatusRefunded);
         }
+
+        [Theory]
+        [InlineData("/images/no-image.svg")]
+        [InlineData(@"\images\no-image.svg")]
+        [InlineData("images/NO-IMAGE.svg")]
+        public void SD_IsDefaultMenuItemImage_ReturnsTrue_ForPlaceholderPaths(string path)
+        {
+            Assert.True(SD.IsDefaultMenuItemImage(path));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("/images/menuItems/shrimp.png")]
+        public void SD_IsDefaultMenuItemImage_ReturnsFalse_ForOtherPaths(string? path)
+        {
+            Assert.False(SD.IsDefaultMenuItemImage(path));
+        }
     }
 }
